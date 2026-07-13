@@ -57,36 +57,67 @@ button{font-family:var(--font-body);cursor:pointer;}
 input,select,textarea{font-family:var(--font-body);}
 ::selection{background:var(--blue-light);}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
-
+ 
 /* ============================================================
    LAYOUT
    ============================================================ */
 #appShell{display:flex;min-height:100vh;}
 .sidebar{
   width:230px;flex:0 0 230px;
-  background:linear-gradient(180deg,var(--navy) 0%,#0F2531 100%);
+  background:
+    radial-gradient(420px 220px at 15% 0%, rgba(46,117,182,.28), transparent 65%),
+    linear-gradient(180deg,var(--navy) 0%,#0F2531 100%);
   color:#fff;
   display:flex;flex-direction:column;padding:20px 0;position:sticky;top:0;height:100vh;
   box-shadow:2px 0 20px rgba(0,0,0,.12);
 }
-.brand{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;}
-.brand-mark{font-family:var(--font-head);font-weight:700;font-size:18px;letter-spacing:.02em;line-height:1.2;}
-.brand-sub{font-size:11px;color:#9FB4C2;margin-top:3px;letter-spacing:.03em;text-transform:uppercase;}
+.brand{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;display:flex;align-items:center;gap:11px;}
+.brand-badge{
+  width:38px;height:38px;flex:0 0 38px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue-2),var(--blue) 55%,var(--navy-2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-weight:700;font-size:16px;color:#fff;
+  box-shadow:0 4px 14px rgba(46,117,182,.45), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.brand-text{min-width:0;}
+.brand-mark{font-family:var(--font-head);font-weight:700;font-size:16.5px;letter-spacing:.01em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand-sub{font-size:10px;color:#8FACC0;margin-top:2px;letter-spacing:.08em;text-transform:uppercase;}
+.company-switch-btn{
+  width:calc(100% - 20px);margin:10px 10px 4px;padding:8px 10px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);border-radius:8px;color:#C7D6E0;font-size:11.5px;font-weight:600;
+  display:flex;align-items:center;justify-content:space-between;transition:background .15s,border-color .15s;
+}
+.company-switch-btn:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.28);}
+ 
+.company-list-item{
+  display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--line);border-radius:10px;
+  background:#fff;text-align:left;width:100%;transition:all .15s var(--ease);
+}
+.company-list-item:hover{border-color:var(--blue-2);box-shadow:var(--shadow);}
+.company-list-item.active{border-color:var(--blue);background:var(--blue-light);}
+.company-list-logo{width:34px;height:34px;object-fit:contain;border-radius:7px;flex:0 0 34px;}
+.company-list-badge{
+  width:34px;height:34px;border-radius:9px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#fff;font-weight:700;font-family:var(--font-head);font-size:14px;
+}
+.company-list-name{flex:1;font-weight:600;font-size:13.5px;color:var(--text);}
 .nav{list-style:none;margin:0;padding:0 10px;flex:1;}
-.nav li{margin-bottom:2px;}
+.nav li{margin-bottom:3px;}
 .nav button{
-  width:100%;text-align:left;background:none;border:none;color:#C7D6E0;
-  padding:10px 12px;border-radius:9px;font-size:14px;font-weight:500;
-  display:flex;align-items:center;gap:10px;transition:background .16s var(--ease),color .16s var(--ease),transform .12s var(--ease);
+  width:100%;text-align:left;background:none;border:none;color:#B9CBD9;
+  padding:10px 12px;border-radius:9px;font-size:13.5px;font-weight:500;
+  display:flex;align-items:center;gap:11px;transition:background .16s var(--ease),color .16s var(--ease),transform .12s var(--ease);
   position:relative;
 }
-.nav button:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(1px);}
-.nav button.active{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;box-shadow:0 4px 12px rgba(46,117,182,.35);}
-.nav .ic{width:18px;text-align:center;font-size:15px;}
+.nav button:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(1px);}
+.nav button.active{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;box-shadow:0 4px 14px rgba(46,117,182,.4), inset 0 1px 0 rgba(255,255,255,.2);font-weight:600;}
+.nav .ic{width:19px;height:19px;flex:0 0 19px;display:inline-flex;align-items:center;justify-content:center;opacity:.85;}
+.nav .ic svg{width:100%;height:100%;}
+.nav button.active .ic,.nav button:hover .ic{opacity:1;}
 .sidebar-foot{padding:14px 20px 0;border-top:1px solid rgba(255,255,255,.1);margin-top:10px;}
-.sidebar-foot button{width:100%;background:none;border:1px solid rgba(255,255,255,.18);color:#C7D6E0;padding:8px;border-radius:8px;font-size:12.5px;transition:background .15s,border-color .15s;}
+.sidebar-foot button{width:100%;background:none;border:1px solid rgba(255,255,255,.18);color:#C7D6E0;padding:9px;border-radius:9px;font-size:12.5px;font-weight:500;transition:background .15s,border-color .15s;display:flex;align-items:center;justify-content:center;}
 .sidebar-foot button:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.32);}
-
+ 
 .main{flex:1;min-width:0;display:flex;flex-direction:column;}
 .topbar{
   background:rgba(255,255,255,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
@@ -99,7 +130,7 @@ input,select,textarea{font-family:var(--font-body);}
 .topbar .meta{font-size:12.5px;color:var(--text-muted);margin-top:2px;}
 .content{padding:24px 26px 60px;flex:1;}
 .hamburger{display:none;background:none;border:none;font-size:20px;color:var(--navy);}
-
+ 
 /* ============================================================
    COMPONENTS
    ============================================================ */
@@ -112,7 +143,7 @@ input,select,textarea{font-family:var(--font-body);}
 .grid-2{grid-template-columns:repeat(2,1fr);}
 @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:640px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr;}}
-
+ 
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:box-shadow .18s var(--ease),transform .18s var(--ease);}
 .kpi:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
 .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--line);}
@@ -122,7 +153,7 @@ input,select,textarea{font-family:var(--font-body);}
 .kpi.accent::before{background:linear-gradient(90deg,var(--blue),var(--blue-2));}
 .kpi.warn::before{background:linear-gradient(90deg,#C98A00,var(--amber));}
 .kpi.good::before{background:linear-gradient(90deg,var(--green),#2FA84F);}
-
+ 
 .btn{
   display:inline-flex;align-items:center;gap:6px;border-radius:9px;border:1px solid var(--line);
   background:#fff;color:var(--text);padding:9px 14px;font-size:13.5px;font-weight:600;
@@ -142,7 +173,7 @@ input,select,textarea{font-family:var(--font-body);}
 .btn-ghost:hover{color:var(--blue);}
 .btn[disabled]{opacity:.5;cursor:not-allowed;}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;}
-
+ 
 label{display:block;font-size:12.5px;font-weight:600;color:var(--text-muted);margin-bottom:5px;}
 .field{margin-bottom:14px;}
 input[type=text],input[type=number],input[type=date],input[type=email],input[type=tel],input[type=password],select,textarea{
@@ -156,7 +187,7 @@ textarea{resize:vertical;min-height:70px;}
 .hint{font-size:11.5px;color:var(--text-muted);margin-top:4px;}
 .checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
 .checkbox-row input{width:auto;}
-
+ 
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead th{
   background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;text-align:left;padding:11px 12px;font-weight:600;
@@ -172,24 +203,24 @@ tbody tr:last-child td{border-bottom:none;}
 .tfoot-row td{background:var(--grey-bg);font-weight:700;border-top:2px solid var(--navy-2);}
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
 .table-wrap table{border:none;}
-
+ 
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);}
 .badge-paid{background:var(--green-bg);color:var(--green);}
 .badge-partial{background:var(--amber-bg);color:var(--amber);}
 .badge-unpaid{background:var(--red-bg);color:var(--red);}
 .badge-overdue{background:#F8D7D5;color:#7A1712;}
 .badge-cancelled{background:var(--grey-bg);color:var(--text-muted);}
-
+ 
 .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;justify-content:space-between;}
 .toolbar-left,.toolbar-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 .search-box{position:relative;}
 .search-box input{padding-left:30px;width:220px;}
 .search-box::before{content:"⌕";position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);}
-
+ 
 .empty-state{text-align:center;padding:56px 20px;color:var(--text-muted);}
 .empty-state .big{font-size:38px;margin-bottom:12px;filter:drop-shadow(0 4px 10px rgba(19,44,57,.12));}
 .empty-state h3{color:var(--navy);margin-bottom:6px;font-size:16px;}
-
+ 
 .modal-overlay{
   position:fixed;inset:0;background:rgba(11,25,32,.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;
   z-index:100;padding:20px;animation:overlayIn .15s var(--ease);
@@ -203,19 +234,23 @@ tbody tr:last-child td{border-bottom:none;}
 .modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;}
 .modal-close{background:none;border:none;font-size:20px;color:var(--text-muted);line-height:1;transition:color .12s;}
 .modal-close:hover{color:var(--red);}
-
+ 
 .toast-wrap{position:fixed;top:18px;right:18px;z-index:200;display:flex;flex-direction:column;gap:8px;}
 .toast{background:var(--navy);color:#fff;padding:11px 16px;border-radius:9px;font-size:13px;box-shadow:var(--shadow-lg);animation:slideIn .22s var(--ease);}
 .toast.error{background:var(--red);}
 .toast.success{background:var(--green);}
 @keyframes slideIn{from{transform:translateX(30px);opacity:0;}to{transform:translateX(0);opacity:1;}}
-
+ 
 .line-items-table input,.line-items-table select{padding:7px 8px;font-size:13px;}
 .line-items-table td{padding:6px;}
 .custom-fields-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
 .custom-field-row{display:flex;gap:8px;align-items:center;}
 .custom-field-row input{flex:1;}
-
+ 
+.boot-loading{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy);}
+.boot-spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+ 
 .gate-wrap{
   min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
   background:
@@ -235,16 +270,16 @@ tbody tr:last-child td{border-bottom:none;}
 .gate-error{color:var(--red);font-size:12.5px;margin-top:8px;min-height:16px;}
 .config-error{max-width:640px;margin:60px auto;}
 .config-error pre{background:#0F2530;color:#C7D6E0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12.5px;}
-
+ 
 .chart-bars{display:flex;align-items:flex-end;gap:6px;height:160px;margin-top:10px;}
 .chart-bar{flex:1;background:linear-gradient(180deg,var(--blue),var(--navy-2));border-radius:4px 4px 0 0;position:relative;min-height:2px;}
 .chart-bar .bar-label{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:9.5px;color:var(--text-muted);}
 .chart-bar .bar-value{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:9.5px;font-family:var(--font-mono);color:var(--navy);font-weight:600;}
 .chart-wrap{padding-bottom:24px;}
-
+ 
 .client-tag{font-size:12px;color:var(--text-muted);}
 .pill{display:inline-block;background:var(--blue-light);color:var(--blue);padding:2px 8px;border-radius:12px;font-size:11.5px;font-weight:600;}
-
+ 
 /* Print templates hidden on-screen */
 .print-only{display:none;}
 @page{ margin:0; background:#fff; }
@@ -269,48 +304,72 @@ tbody tr:last-child td{border-bottom:none;}
 .pdoc .totals-row td{padding:4px 8px;font-size:12px;}
 .pdoc .sig{margin-top:40px;text-align:right;}
 .ledger-print-head{background:var(--navy-2);color:#fff;padding:16px 20px;margin:-30px -30px 20px;}
-
-/* New invoice print layout (matches JVS reference format) */
-.pdoc2{font-family:Arial,Helvetica,sans-serif;color:#111;padding:26px 30px;max-width:820px;margin:0 auto;font-size:12px;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-.pdoc2 table{border-collapse:collapse;width:100%;}
+ 
+/* New invoice print layout — themeable via CSS variables set inline on .pdoc2 */
+.pdoc2{
+  --ph-font:'Calibri','Carlito',sans-serif;
+  --ph-primary:#1F4E5F;
+  --ph-border:#333;
+  --ph-border-w:1px;
+  --ph-header-bg:#2E75B6;
+  --ph-header-text:#fff;
+  --ph-transform:uppercase;
+  font-family:var(--ph-font);
+  color:#1a2430;padding:30px 34px;max-width:840px;margin:0 auto;font-size:10.7px;line-height:1.45;
+  background:#fff;text-transform:var(--ph-transform);-webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.pdoc2 table{border-collapse:collapse;width:100%;font-family:inherit;}
+.pdoc2 b{font-weight:400;}
 .ph-headrow td{vertical-align:top;padding:0;}
-.ph-logo{height:52px;max-width:200px;object-fit:contain;}
-.ph-bizname{font-size:20px;font-weight:700;color:#1F4E5F;}
-.ph-doctitle{font-size:22px;font-weight:700;color:#333;}
-.ph-disclaimer{text-align:center;font-size:10.5px;color:#a33;margin:2px 0 10px;}
-.ph-info{margin-top:14px;border:1px solid #333;}
-.ph-info td{border-right:1px solid #333;padding:10px;font-size:11.5px;vertical-align:top;}
+.ph-letterhead-row td{vertical-align:top;padding:0;}
+.ph-letterhead-info{margin-top:8px;font-size:9px;line-height:1.7;}
+.ph-box-letterhead{font-size:7.5px;line-height:1.6;}
+.ph-letterhead-meta{margin-left:auto;margin-top:10px;font-size:9px;text-align:right;}
+.ph-letterhead-meta > div{margin-bottom:6px;}
+.ph-logo{height:108px;max-width:420px;object-fit:contain;}
+.ph-bizname{font-size:19.5px;font-weight:700;color:var(--ph-primary);letter-spacing:-.01em;}
+.ph-doctitle{font-size:15.5px;font-weight:400;color:var(--ph-primary);letter-spacing:-.005em;}
+.ph-disclaimer{text-align:center;font-size:9px;color:#a33;margin:2px 0 10px;}
+.ph-outline-wrap{margin-top:16px;border-left:var(--ph-border-w) solid var(--ph-border);border-right:var(--ph-border-w) solid var(--ph-border);}
+.ph-info{margin-top:0;border-top:var(--ph-border-w) solid var(--ph-border);border-bottom:var(--ph-border-w) solid var(--ph-border);}
+.ph-spacer-row{width:100%;}
+.ph-items{margin-top:0;border-top:var(--ph-border-w) solid var(--ph-border);border-bottom:var(--ph-border-w) solid var(--ph-border);}
+.ph-spacer-row td{height:16px;padding:0;border:none;}
+.ph-info td{border-right:var(--ph-border-w) solid var(--ph-border);padding:12px 14px;font-size:10px;vertical-align:top;}
 .ph-info td:last-child{border-right:none;}
 .ph-info-col{width:24%;}
-.ph-info-col > div{margin-bottom:8px;}
-.ph-label{color:#666;font-size:10px;text-transform:uppercase;letter-spacing:.02em;}
-.ph-box{width:38%;}
-.ph-box-label{font-weight:700;font-size:11.5px;margin-bottom:4px;}
-.ph-items{margin-top:0;border:1px solid #333;border-top:none;}
-.ph-items th,.ph-items td{border:1px solid #333;padding:6px 7px;font-size:10.8px;}
-.ph-items th{background:#e5e5e5;text-align:left;}
-.ph-stack-totals{width:auto;margin-left:auto;margin-top:0;border:1px solid #333;border-top:none;max-width:320px;}
-.ph-stack-totals td{padding:5px 10px;font-size:11.5px;border-top:1px solid #eee;}
-.ph-stack-totals td:last-child{text-align:right;font-family:var(--font-mono);}
-.ph-stack-totals tr.strong td{font-weight:700;border-top:1.5px solid #333;}
-.ph-terms-bank{margin-top:14px;border:1px solid #333;}
-.ph-terms-bank td{border-right:1px solid #333;padding:10px;vertical-align:top;width:50%;}
+.ph-info-col > div{margin-bottom:9px;}
+.ph-label{color:#5B6B7A;font-size:8px;letter-spacing:.05em;font-weight:400;}
+.ph-box{width:38%;font-size:8.8px;line-height:1.55;}
+.ph-box-billed{font-size:7.8px;line-height:1.5;}
+.ph-box-label{font-weight:700;font-size:11.5px;margin-bottom:7px;color:var(--ph-primary);letter-spacing:.03em;}
+.ph-items th,.ph-items td{border:var(--ph-border-w) solid var(--ph-border);padding:7px 8px;font-size:9.3px;}
+.ph-items th{background:var(--ph-header-bg);color:var(--ph-header-text);text-align:left;font-weight:400;letter-spacing:.03em;font-size:8px;}
+.pdoc2 thead th:first-child,.pdoc2 thead th:last-child{border-radius:0;}
+.ph-stack-totals{width:auto;margin-left:auto;margin-top:0;border:var(--ph-border-w) solid var(--ph-border);border-top:none;max-width:320px;}
+.ph-stack-totals td{padding:6px 12px;font-size:10px;border-top:1px solid #ddd;font-weight:400;}
+.ph-stack-totals td:last-child{text-align:right;}
+.ph-stack-totals tr.strong td{font-weight:400;border-top:1.5px solid var(--ph-border);}
+.ph-terms-bank{margin-top:16px;border:var(--ph-border-w) solid var(--ph-border);}
+.ph-terms-bank td{border-right:var(--ph-border-w) solid var(--ph-border);padding:12px 14px;vertical-align:top;width:50%;}
 .ph-terms-bank td:last-child{border-right:none;}
-.ph-hsn{margin-top:14px;border:1px solid #333;}
-.ph-hsn th,.ph-hsn td{border:1px solid #333;padding:5px 8px;font-size:10.8px;}
-.ph-hsn th{background:#e5e5e5;}
-.ph-tax-words{font-size:10.5px;font-weight:700;margin-top:6px;}
+.ph-hsn{margin-top:16px;border:var(--ph-border-w) solid var(--ph-border);}
+.ph-hsn th,.ph-hsn td{border:var(--ph-border-w) solid var(--ph-border);padding:6px 9px;font-size:9.3px;}
+.ph-hsn th{background:var(--ph-header-bg);color:var(--ph-header-text);font-weight:400;letter-spacing:.03em;font-size:8px;}
+.ph-tax-words{font-size:9px;font-weight:400;margin-top:8px;color:var(--ph-primary);}
 .ph-footer{margin-top:34px;}
 .ph-sig-block{text-align:right;}
-.ph-sig-name{font-family:'Brush Script MT',cursive;font-size:22px;color:#1F4E5F;}
-.ph-sig-title{font-size:11px;font-weight:700;border-top:1px solid #333;display:inline-block;padding-top:3px;margin-top:2px;}
-
+.ph-sig-name{font-family:'Brush Script MT',cursive;font-size:20.5px;color:var(--ph-primary);text-transform:none;}
+.ph-sig-img{max-height:168px;max-width:595px;object-fit:contain;display:block;margin-left:auto;}
+.ph-sig-title{font-size:9.5px;font-weight:400;border-top:1.5px solid var(--ph-border);display:inline-block;padding-top:4px;margin-top:4px;color:#1a2430;}
+.ph-strong{font-weight:700 !important;font-size:10.5px !important;}
+ 
 @media(max-width:900px){
   .sidebar{position:fixed;left:-230px;transition:left .2s;z-index:50;}
   .sidebar.open{left:0;}
   .hamburger{display:block;}
 }
-
+ 
 /* ============================================================
    MOBILE: bottom tab bar (replaces sidebar under 768px)
    ============================================================ */
@@ -325,6 +384,21 @@ tbody tr:last-child td{border-bottom:none;}
 .badge-rejected{background:var(--red-bg);color:var(--red);}
 .badge-expired{background:#F8D7D5;color:#7A1712;}
 .doctype-picker{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.invoice-form-grid{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start;}
+ 
+.theme-picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+.theme-swatch{
+  border:2px solid var(--line);border-radius:10px;padding:0;overflow:hidden;background:#fff;text-align:left;
+  transition:all .16s var(--ease);cursor:pointer;
+}
+.theme-swatch:hover{border-color:var(--blue-2);transform:translateY(-1px);box-shadow:var(--shadow);}
+.theme-swatch.active{border-color:var(--blue);box-shadow:0 4px 14px rgba(46,117,182,.25);}
+.theme-swatch-preview{padding:10px;background:#FAFBFD;}
+.theme-swatch-bar{height:14px;border-radius:3px;margin-bottom:6px;}
+.theme-swatch-lines{display:flex;flex-direction:column;gap:4px;}
+.theme-swatch-lines span{display:block;height:4px;border-radius:2px;}
+.theme-swatch-name{padding:8px 10px;font-size:12.5px;font-weight:600;color:var(--text);}
+.theme-swatch-check{padding:0 10px 8px;font-size:11px;font-weight:700;color:var(--blue);}
 .doctype-picker button{
   flex:1;min-width:120px;padding:13px;border-radius:12px;border:2px solid var(--line);background:#fff;
   font-weight:700;font-size:13px;color:var(--text-muted);text-align:center;
@@ -333,9 +407,15 @@ tbody tr:last-child td{border-bottom:none;}
 .doctype-picker button:hover{border-color:var(--blue-2);color:var(--blue);transform:translateY(-1px);box-shadow:var(--shadow);}
 .doctype-picker button.active{border-color:var(--blue);color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-2));box-shadow:0 4px 14px rgba(46,117,182,.3);}
 .sticky-bottom-bar{display:none;}
-
+ 
 @media(max-width:768px){
   #appShell{display:block;}
+  .table-wrap{position:relative;}
+  .table-wrap:has(table:not(.responsive-cards))::after{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:22px;
+    background:linear-gradient(90deg,transparent,rgba(244,247,251,.95));
+    pointer-events:none;border-radius:0 var(--radius) var(--radius) 0;
+  }
   .sidebar{display:none;}
   .hamburger{display:none;}
   .main{width:100%;}
@@ -344,7 +424,13 @@ tbody tr:last-child td{border-bottom:none;}
   .topbar h1{font-size:16.5px;}
   #topbarActions{width:100%;}
   #topbarActions .btn{flex:1;justify-content:center;}
-
+ 
+  .invoice-form-grid{grid-template-columns:1fr;}
+  .invoice-form-side{position:static !important;top:auto !important;}
+  .btn-sm{min-height:38px;padding:8px 12px;}
+  .btn-ghost{min-width:38px;min-height:38px;display:inline-flex;align-items:center;justify-content:center;}
+  .checkbox-row input,.field input[type=checkbox]{width:18px;height:18px;}
+ 
   .bottom-nav{
     display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;
     background:var(--navy);z-index:60;box-shadow:0 -2px 12px rgba(0,0,0,.18);
@@ -355,15 +441,16 @@ tbody tr:last-child td{border-bottom:none;}
     align-items:center;justify-content:center;font-size:9.5px;gap:2px;font-weight:600;padding:6px 2px;
   }
   .bottom-nav button.active{color:#fff;}
-  .bottom-nav .ic{font-size:18px;line-height:1;}
-
+  .bottom-nav .ic{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;}
+  .bottom-nav .ic svg{width:100%;height:100%;}
+ 
   .field-row{flex-direction:column;gap:0;}
   .field-row>.field{flex:none;}
   .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;}
   input,select,textarea,.btn{font-size:15px;}
   .btn{padding:11px 14px;min-height:42px;}
   table{font-size:12.5px;}
-
+ 
   /* Line items: stacked cards instead of a wide table */
   .line-items-table thead{display:none;}
   .line-items-table, .line-items-table tbody{display:block;width:100%;}
@@ -375,7 +462,7 @@ tbody tr:last-child td{border-bottom:none;}
     content:attr(data-label);display:block;font-size:11px;font-weight:700;color:var(--text-muted);
     text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px;
   }
-
+ 
   /* Documents/Clients lists: stacked cards on mobile */
   table.responsive-cards thead{display:none;}
   table.responsive-cards, table.responsive-cards tbody{display:block;width:100%;}
@@ -388,31 +475,31 @@ tbody tr:last-child td{border-bottom:none;}
     color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;
   }
   table.responsive-cards .btn-row{margin-top:6px;}
-
+ 
   .sticky-bottom-bar{
     display:flex;position:fixed;bottom:60px;left:0;right:0;background:#fff;border-top:1px solid var(--line);
     padding:10px 14px;align-items:center;justify-content:space-between;z-index:55;box-shadow:0 -4px 14px rgba(0,0,0,.08);
   }
   .sticky-bottom-bar .amt{font-family:var(--font-mono);font-weight:700;font-size:16px;color:var(--navy);}
   .sticky-bottom-bar .amt-label{font-size:10.5px;color:var(--text-muted);text-transform:uppercase;}
-
+ 
   .doctype-picker button{min-width:100px;font-size:12px;padding:10px 6px;}
   .kpi .value{font-size:18px;}
-
+ 
   .toolbar{flex-direction:column;align-items:stretch;}
   .toolbar-left,.toolbar-right{flex-direction:column;align-items:stretch;width:100%;}
   .toolbar-left > select,.toolbar-left > input,.toolbar-right > select{width:100%;}
   .search-box{width:100%;}
   .search-box input{width:100%;}
   .toolbar-right{margin-top:8px;flex-direction:row;align-items:center;}
-
+ 
   .modal-overlay{padding:0;align-items:flex-end;}
   .modal-box{max-width:100%;border-radius:14px 14px 0 0;max-height:92vh;}
 }
 </style>
 </head>
 <body>
-
+ 
 <!-- ============================================================
      CONFIG — edit these two lines after creating your Supabase
      project and running supabase_schema.sql in its SQL editor.
@@ -424,18 +511,22 @@ const CONFIG = {
   APP_NAME: 'JVS Infraserve'
 };
 </script>
-
-<div id="root"></div>
+ 
+<div id="root">
+  <div class="boot-loading">
+    <div class="boot-spinner"></div>
+  </div>
+</div>
 <div id="toastWrap" class="toast-wrap"></div>
 <div id="printInvoiceArea" class="print-only"></div>
 <div id="printLedgerArea" class="print-only"></div>
-
+ 
 <script>
 /* ============================================================
    UTILITIES
    ============================================================ */
 function uid(){ return (crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(16).slice(2)); }
-
+ 
 function inr(n, opts){
   opts = opts || {};
   n = Number(n)||0;
@@ -453,23 +544,24 @@ function inr(n, opts){
   let str = (opts.symbol===false ? '' : '₹') + out + (opts.noDecimals ? '' : '.'+dec);
   return neg ? '('+str+')' : str;
 }
-
+ 
 function fmtDate(d){
   if(!d) return '—';
   const dt = (d instanceof Date) ? d : new Date(d+'T00:00:00');
   if(isNaN(dt.getTime())) return '—';
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return String(dt.getDate()).padStart(2,'0')+'-'+months[dt.getMonth()]+'-'+dt.getFullYear();
+  const dd = String(dt.getDate()).padStart(2,'0');
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  return `${dd}/${mm}/${dt.getFullYear()}`;
 }
 function todayISO(){ return new Date().toISOString().slice(0,10); }
 function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
+ 
 function financialYear(dateStr){
   const d = new Date(dateStr+'T00:00:00');
   const y = d.getFullYear(), m = d.getMonth()+1;
   return m>=4 ? `${y}-${String(y+1).slice(-2)}` : `${y-1}-${String(y).slice(-2)}`;
 }
-
+ 
 function numberToWordsINR(num){
   const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
   const b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
@@ -488,13 +580,13 @@ function numberToWordsINR(num){
   if(rest) str+=three(rest);
   return str.trim();
 }
-
+ 
 async function sha256Hex(str){
   const enc = new TextEncoder().encode(str);
   const buf = await crypto.subtle.digest('SHA-256', enc);
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
+ 
 function toast(msg, type){
   const wrap = document.getElementById('toastWrap');
   const el = document.createElement('div');
@@ -503,11 +595,11 @@ function toast(msg, type){
   wrap.appendChild(el);
   setTimeout(()=>{ el.remove(); }, 3200);
 }
-
+ 
 function debounce(fn, ms){
   let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), ms); };
 }
-
+ 
 /* ============================================================
    SUPABASE INIT
    ============================================================ */
@@ -521,13 +613,16 @@ function initSupabase(){
   sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
   return true;
 }
-
+ 
 /* ============================================================
    STATE
    ============================================================ */
 const STATE = {
   unlocked:false,
   settings:null,
+  appSettings:null,
+  companies:[],
+  currentCompanyId:'default',
   clients:[],
   items:[],
   invoices:[],
@@ -536,39 +631,66 @@ const STATE = {
   newDocType:'invoice',
   dashboardRange:{from:null,to:null,clientId:'all',preset:'fy'},
   ledgerFilter:{clientId:null,from:null,to:null},
+  ledgerBookFilter:{clientId:'all',from:null,to:null},
   invoiceFilter:{clientId:'all',status:'all',docType:'all',from:null,to:null,q:''},
   sidebarOpen:false,
 };
-
+ 
 /* ============================================================
    DATA FETCH
    ============================================================ */
+async function fetchAppSettings(){
+  const {data,error} = await sb.from('app_settings').select('*').eq('id','app').maybeSingle();
+  if(error){ toast('App settings load error: '+error.message,'error'); return null; }
+  STATE.appSettings = data;
+  return data;
+}
+async function fetchCompanies(){
+  const {data,error} = await sb.from('business_settings').select('id,business_name,logo_data_url').order('business_name');
+  if(error){ toast('Companies load error: '+error.message,'error'); return; }
+  STATE.companies = data||[];
+  if(!STATE.companies.some(c=>c.id===STATE.currentCompanyId)){
+    STATE.currentCompanyId = STATE.companies[0]?.id || 'default';
+  }
+}
 async function fetchSettings(){
-  const {data,error} = await sb.from('business_settings').select('*').eq('id','default').maybeSingle();
+  const {data,error} = await sb.from('business_settings').select('*').eq('id',STATE.currentCompanyId).maybeSingle();
   if(error){ toast('Settings load error: '+error.message,'error'); return null; }
   STATE.settings = data;
   return data;
 }
 async function fetchClients(){
-  const {data,error} = await sb.from('clients').select('*').order('name');
+  const {data,error} = await sb.from('clients').select('*').eq('company_id',STATE.currentCompanyId).order('name');
   if(error){ toast('Clients load error: '+error.message,'error'); return; }
   STATE.clients = data||[];
 }
 async function fetchItems(){
-  const {data,error} = await sb.from('items').select('*').order('name');
+  const {data,error} = await sb.from('items').select('*').eq('company_id',STATE.currentCompanyId).order('name');
   if(error){ toast('Items load error: '+error.message,'error'); return; }
   STATE.items = data||[];
 }
 async function fetchInvoices(){
-  const {data,error} = await sb.from('invoices').select('*').order('invoice_date',{ascending:false}).order('created_at',{ascending:false});
+  const {data,error} = await sb.from('invoices').select('*').eq('company_id',STATE.currentCompanyId).order('invoice_date',{ascending:false}).order('created_at',{ascending:false});
   if(error){ toast('Invoices load error: '+error.message,'error'); return; }
   STATE.invoices = data||[];
   recomputeInvoiceStatuses();
 }
 async function fetchAll(){
+  await fetchCompanies();
   await Promise.all([fetchSettings(), fetchClients(), fetchItems(), fetchInvoices()]);
 }
-
+async function switchCompany(companyId){
+  if(companyId===STATE.currentCompanyId) return;
+  STATE.currentCompanyId = companyId;
+  DRAFT = null;
+  STATE.editingInvoiceId = null;
+  document.getElementById('root').innerHTML = '<div class="boot-loading"><div class="boot-spinner"></div></div>';
+  await Promise.all([fetchSettings(), fetchClients(), fetchItems(), fetchInvoices()]);
+  STATE.view = 'dashboard';
+  renderApp();
+  toast(`Switched to ${STATE.settings?.business_name || 'company'}`, 'success');
+}
+ 
 const DOC_TYPES = {
   proposal: {label:'Proposal',       short:'Proposal', printTitle:'PROPOSAL',        badgeClass:'doctype-proposal'},
   proforma: {label:'Proforma Invoice', short:'Proforma', printTitle:'PROFORMA INVOICE', badgeClass:'doctype-proforma'},
@@ -576,7 +698,47 @@ const DOC_TYPES = {
 };
 function docType(inv){ const t = inv.doc_type || 'invoice'; return t==='quotation' ? 'proforma' : t; }
 function isRealInvoice(inv){ return docType(inv)==='invoice'; }
-
+ 
+/* ============================================================
+   PDF THEMES — pick a look for printed documents
+   ============================================================ */
+const PDF_THEMES = {
+  classic: {
+    name:'Classic Navy', swatch:'#1F4E5F',
+    font:"'Calibri','Carlito',sans-serif", primary:'#1F4E5F', border:'#333', borderW:'1px',
+    headerBg:'#2E75B6', headerText:'#fff', transform:'uppercase',
+  },
+  minimal: {
+    name:'Modern Minimal', swatch:'#2E75B6',
+    font:"'Calibri','Carlito',sans-serif", primary:'#1a1a1a', border:'#c9ced6', borderW:'1px',
+    headerBg:'#EEF1F5', headerText:'#1a1a1a', transform:'none',
+  },
+  green: {
+    name:'Corporate Green', swatch:'#1E8449',
+    font:"'Calibri','Carlito',sans-serif", primary:'#0F5132', border:'#333', borderW:'1px',
+    headerBg:'#1E8449', headerText:'#fff', transform:'uppercase',
+  },
+  mono: {
+    name:'Bold Black & White', swatch:'#000000',
+    font:"'Calibri','Carlito',sans-serif", primary:'#000', border:'#000', borderW:'1.5px',
+    headerBg:'#000', headerText:'#fff', transform:'uppercase',
+  },
+  elegant: {
+    name:'Elegant Serif', swatch:'#6B1420',
+    font:"Georgia,'Times New Roman',serif", primary:'#6B1420', border:'#6B1420', borderW:'1px',
+    headerBg:'#6B1420', headerText:'#fff', transform:'none',
+  },
+  letterhead: {
+    name:'Letterhead Style', swatch:'#1F4E5F',
+    font:"'Calibri','Carlito',sans-serif", primary:'#1F4E5F', border:'#333', borderW:'1px',
+    headerBg:'#2E75B6', headerText:'#fff', transform:'uppercase', layout:'letterhead',
+  },
+};
+function pdfThemeVars(themeKey){
+  const t = PDF_THEMES[themeKey] || PDF_THEMES.classic;
+  return `--ph-font:${t.font};--ph-primary:${t.primary};--ph-border:${t.border};--ph-border-w:${t.borderW};--ph-header-bg:${t.headerBg};--ph-header-text:${t.headerText};--ph-transform:${t.transform};`;
+}
+ 
 function recomputeInvoiceStatuses(){
   const today = todayISO();
   STATE.invoices.forEach(inv=>{
@@ -593,10 +755,10 @@ function recomputeInvoiceStatuses(){
     else { inv._status = (inv.due_date && inv.due_date < today) ? 'Overdue' : 'Unpaid'; }
   });
 }
-
+ 
 function clientById(id){ return STATE.clients.find(c=>c.id===id); }
 function itemById(id){ return STATE.items.find(i=>i.id===id); }
-
+ 
 /* ============================================================
    REALTIME
    ============================================================ */
@@ -645,7 +807,7 @@ function renderConfigError(){
       </div>
     </div>`;
 }
-
+ 
 function renderSetPinScreen(){
   document.getElementById('root').innerHTML = `
     <div class="gate-wrap">
@@ -665,7 +827,7 @@ function renderSetPinScreen(){
     if(p1.length<4){ err.textContent='PIN must be at least 4 digits.'; return; }
     if(p1!==p2){ err.textContent='PINs do not match.'; return; }
     const hash = await sha256Hex(p1);
-    const {error} = await sb.from('business_settings').update({pin_hash:hash}).eq('id','default');
+    const {error} = await sb.from('app_settings').upsert({id:'app', pin_hash:hash});
     if(error){ err.textContent='Could not save PIN: '+error.message; return; }
     STATE.unlocked = true;
     await fetchAll();
@@ -673,7 +835,7 @@ function renderSetPinScreen(){
     renderApp();
   };
 }
-
+ 
 function renderPinLoginScreen(){
   document.getElementById('root').innerHTML = `
     <div class="gate-wrap">
@@ -689,7 +851,7 @@ function renderPinLoginScreen(){
     const pin = document.getElementById('pinInput').value.trim();
     const err = document.getElementById('gateErr');
     const hash = await sha256Hex(pin);
-    if(hash !== STATE.settings.pin_hash){ err.textContent='Incorrect PIN.'; return; }
+    if(hash !== STATE.appSettings?.pin_hash){ err.textContent='Incorrect PIN.'; return; }
     STATE.unlocked = true;
     await fetchAll();
     subscribeRealtime();
@@ -698,41 +860,65 @@ function renderPinLoginScreen(){
   document.getElementById('pinBtn').onclick = submit;
   document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
 }
-
+ 
 /* ============================================================
    APP SHELL
    ============================================================ */
+const ICONS = {
+  dashboard: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="6.5" height="6.5" rx="1.3"/><rect x="11" y="2.5" width="6.5" height="4" rx="1.3"/><rect x="11" y="8.7" width="6.5" height="8.8" rx="1.3"/><rect x="2.5" y="11.2" width="6.5" height="6.3" rx="1.3"/></svg>`,
+  newdoc: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5H5.8a1.8 1.8 0 0 0-1.8 1.8v11.4a1.8 1.8 0 0 0 1.8 1.8h8.4a1.8 1.8 0 0 0 1.8-1.8V7.2L11.5 2.5Z"/><path d="M11.3 2.5V7h4.5"/><path d="M10 10.3v4.4M7.8 12.5h4.4"/></svg>`,
+  documents: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h5.7L15.5 6.6v9a1.6 1.6 0 0 1-1.6 1.6H6A1.6 1.6 0 0 1 4.4 15.6V4.4A1.6 1.6 0 0 1 6 2.8Z"/><path d="M11.4 2.8v3.6a.8.8 0 0 0 .8.8h3.3"/><path d="M7.3 10.5h5.4M7.3 13.2h5.4"/></svg>`,
+  ledger: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="3.2" width="14.8" height="13.6" rx="1.6"/><path d="M2.6 7.6h14.8M7.6 7.6v9.2"/></svg>`,
+  clients: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.3" cy="6.4" r="2.8"/><path d="M2.3 16.3c0-2.7 2.2-4.6 5-4.6s5 1.9 5 4.6"/><circle cx="14.3" cy="6.9" r="2.1"/><path d="M13.1 11.9c2.2.2 3.7 1.9 3.7 4.1"/></svg>`,
+  items: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.6 17 6.4v7.2L10 17.4 3 13.6V6.4Z"/><path d="M3.2 6.5 10 10.2l6.8-3.7M10 10.2v7.2"/></svg>`,
+  settings: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.9v2.1m0 10v2.1m7.1-7.1h-2.1m-10 0H2.9m12.1-4.9-1.5 1.5m-6.9 6.9-1.5 1.5m11.9 0-1.5-1.5m-6.9-6.9L7.6 6.5"/></svg>`,
+  lock: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.3" y="9" width="11.4" height="8" rx="1.6"/><path d="M6.6 9V6.3a3.4 3.4 0 0 1 6.8 0V9"/><circle cx="10" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg>`,
+  home: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.3 10 3l7 6.3"/><path d="M5 8.2v7.4a1 1 0 0 0 1 1h2.6v-4.8h2.8v4.8H14a1 1 0 0 0 1-1V8.2"/></svg>`,
+  plus: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>`,
+  more: `<svg viewBox="0 0 20 20" fill="none"><circle cx="4.5" cy="10" r="1.6" fill="currentColor"/><circle cx="10" cy="10" r="1.6" fill="currentColor"/><circle cx="15.5" cy="10" r="1.6" fill="currentColor"/></svg>`,
+  book: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.3 4.3c0-.9.8-1.6 1.7-1.5 1.6.2 3.3.7 4 1.5V16c-.7-.7-2.4-1.2-4-1.4-.9-.1-1.7.6-1.7 1.5V4.3Z"/><path d="M15.7 4.3c0-.9-.8-1.6-1.7-1.5-1.6.2-3.3.7-4 1.5V16c.7-.7 2.4-1.2 4-1.4.9-.1 1.7.6 1.7 1.5V4.3Z"/></svg>`,
+};
 const NAV_ITEMS = [
-  {id:'dashboard', label:'Dashboard', icon:'◧'},
-  {id:'invoice-form', label:'New Document', icon:'✎'},
-  {id:'invoices', label:'Documents', icon:'▤'},
-  {id:'ledger', label:'Client Ledger', icon:'▦'},
-  {id:'clients', label:'Clients', icon:'☰'},
-  {id:'items', label:'Items', icon:'◆'},
-  {id:'settings', label:'Settings', icon:'⚙'},
+  {id:'dashboard', label:'Dashboard', icon:ICONS.dashboard},
+  {id:'invoice-form', label:'New Document', icon:ICONS.newdoc},
+  {id:'invoices', label:'Documents', icon:ICONS.documents},
+  {id:'ledger', label:'Client Ledger', icon:ICONS.ledger},
+  {id:'ledgerbook', label:'Ledger Book', icon:ICONS.book},
+  {id:'clients', label:'Clients', icon:ICONS.clients},
+  {id:'items', label:'Items', icon:ICONS.items},
+  {id:'settings', label:'Settings', icon:ICONS.settings},
 ];
 const BOTTOM_NAV_ITEMS = [
-  {id:'dashboard', label:'Home', icon:'⌂'},
-  {id:'invoice-form', label:'New', icon:'＋'},
-  {id:'invoices', label:'Docs', icon:'▤'},
-  {id:'clients', label:'Clients', icon:'☰'},
-  {id:'more', label:'More', icon:'⋯'},
+  {id:'dashboard', label:'Home', icon:ICONS.home},
+  {id:'invoice-form', label:'New', icon:ICONS.plus},
+  {id:'invoices', label:'Docs', icon:ICONS.documents},
+  {id:'clients', label:'Clients', icon:ICONS.clients},
+  {id:'more', label:'More', icon:ICONS.more},
 ];
-
+ 
 function renderApp(){
   const root = document.getElementById('root');
   root.innerHTML = `
     <div id="appShell">
       <aside class="sidebar" id="sidebar">
         <div class="brand">
-          <div class="brand-mark">${escapeHtml(STATE.settings?.business_name || 'Billing')}</div>
-          <div class="brand-sub">Billing &amp; Ledger</div>
+          ${STATE.settings?.logo_data_url
+            ? `<img src="${STATE.settings.logo_data_url}" style="width:38px;height:38px;object-fit:contain;flex:0 0 38px;border-radius:8px;">`
+            : `<div class="brand-badge">${escapeHtml((STATE.settings?.business_name||'B').trim().slice(0,1).toUpperCase())}</div>`}
+          <div class="brand-text">
+            <div class="brand-mark">${escapeHtml(STATE.settings?.business_name || 'Billing')}</div>
+            <div class="brand-sub">Billing &amp; Ledger</div>
+          </div>
         </div>
+        <button class="company-switch-btn" data-action="switch-company">
+          <span>${STATE.companies.length>1 ? `${STATE.companies.length} companies` : 'Switch company'}</span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M6 8l4 4 4-4"/></svg>
+        </button>
         <ul class="nav">
           ${NAV_ITEMS.map(n=>`<li><button data-nav="${n.id}" class="${STATE.view===n.id?'active':''}"><span class="ic">${n.icon}</span>${n.label}</button></li>`).join('')}
         </ul>
         <div class="sidebar-foot">
-          <button data-action="lock">🔒 Lock App</button>
+          <button data-action="lock"><span class="ic" style="width:15px;height:15px;display:inline-flex;vertical-align:-3px;margin-right:5px;">${ICONS.lock}</span>Lock App</button>
         </div>
       </aside>
       <div class="main">
@@ -755,7 +941,7 @@ function renderApp(){
   bindGlobalEvents();
   renderView();
 }
-
+ 
 function bindGlobalEvents(){
   document.querySelectorAll('[data-nav]').forEach(btn=>{
     btn.addEventListener('click', ()=>{ navigate(btn.dataset.nav); });
@@ -770,12 +956,16 @@ function bindGlobalEvents(){
   if(lockBtn) lockBtn.addEventListener('click', lockApp);
   const hb = document.querySelector('[data-action="toggle-sidebar"]');
   if(hb) hb.addEventListener('click', ()=>{ document.getElementById('sidebar').classList.toggle('open'); });
+  const switchBtn = document.querySelector('[data-action="switch-company"]');
+  if(switchBtn) switchBtn.addEventListener('click', openCompanySwitcher);
 }
-
+ 
 function openMoreSheet(){
   const body = `
     <div class="btn-row" style="flex-direction:column;">
+      <button class="btn" style="justify-content:flex-start;" data-action="more-switch-company">🏢 Switch Company (${escapeHtml(STATE.settings?.business_name||'—')})</button>
       <button class="btn" style="justify-content:flex-start;" data-action="more-go" data-view="ledger">▦ Client Ledger</button>
+      <button class="btn" style="justify-content:flex-start;" data-action="more-go" data-view="ledgerbook">📗 Ledger Book</button>
       <button class="btn" style="justify-content:flex-start;" data-action="more-go" data-view="items">◆ Items &amp; Services</button>
       <button class="btn" style="justify-content:flex-start;" data-action="more-go" data-view="settings">⚙ Settings</button>
       <button class="btn btn-danger" style="justify-content:flex-start;" data-action="more-lock">🔒 Lock App</button>
@@ -785,31 +975,80 @@ function openMoreSheet(){
     closeModal(); navigate(b.dataset.view);
   }));
   overlay.querySelector('[data-action="more-lock"]').addEventListener('click', ()=>{ closeModal(); lockApp(); });
+  overlay.querySelector('[data-action="more-switch-company"]').addEventListener('click', ()=>{ closeModal(); openCompanySwitcher(); });
 }
-
+ 
+function openCompanySwitcher(){
+  const body = `
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      ${STATE.companies.map(c=>`
+        <button class="company-list-item ${c.id===STATE.currentCompanyId?'active':''}" data-switch-to="${c.id}">
+          ${c.logo_data_url ? `<img src="${c.logo_data_url}" class="company-list-logo">` : `<div class="company-list-badge">${escapeHtml((c.business_name||'B').trim().slice(0,1).toUpperCase())}</div>`}
+          <span class="company-list-name">${escapeHtml(c.business_name||'Untitled Company')}</span>
+          ${c.id===STATE.currentCompanyId ? '<span class="pill">Current</span>' : ''}
+        </button>`).join('')}
+    </div>`;
+  const overlay = openModal('Your Companies', body,
+    `<button class="btn" data-action="close-modal">Close</button><button class="btn btn-primary" id="addCompanyBtn">＋ Add Company</button>`);
+  overlay.querySelectorAll('[data-switch-to]').forEach(b=>b.addEventListener('click', async ()=>{
+    closeModal();
+    await switchCompany(b.dataset.switchTo);
+  }));
+  overlay.querySelector('#addCompanyBtn').addEventListener('click', ()=>{ closeModal(); openAddCompanyModal(); });
+}
+ 
+function openAddCompanyModal(){
+  const body = `
+    <div class="field"><label>Company / Firm Name *</label><input id="nc_name" type="text" placeholder="e.g. SJP Equipment Monitoring Services"></div>
+    <div class="field"><label>GSTIN</label><input id="nc_gstin" type="text"></div>
+    <div class="hint">You'll fill in the rest of the profile (address, bank details, logo, numbering...) from Settings right after this is created. Each company keeps its own clients, items, invoices, and numbering — completely separate from the others.</div>
+  `;
+  const overlay = openModal('Add New Company', body,
+    `<button class="btn" data-action="close-modal">Cancel</button><button class="btn btn-primary" id="ncSave">Create &amp; Switch</button>`);
+  overlay.querySelector('#ncSave').addEventListener('click', async ()=>{
+    const name = document.getElementById('nc_name').value.trim();
+    if(!name){ toast('Company name is required','error'); return; }
+    const gstin = document.getElementById('nc_gstin').value.trim();
+    const {data,error} = await sb.from('business_settings').insert({
+      id: uid(),
+      business_name: name, gstin,
+      invoice_prefix:'INV', proforma_prefix:'PI', proposal_prefix:'PROP',
+      invoice_format:'{prefix}/{yy}/{mm}/{seq}', invoice_counter:1, proforma_counter:1, proposal_counter:1,
+      seq_padding:4, fy_reset_enabled:true, default_gst_percent:18, default_supply_type:'intra',
+    }).select().single();
+    if(error){ toast('Could not create company: '+error.message,'error'); return; }
+    closeModal();
+    toast(`${name} created`,'success');
+    await fetchCompanies();
+    await switchCompany(data.id);
+    navigate('settings');
+  });
+}
+ 
 async function lockApp(){
   STATE.unlocked = false;
   STATE.editingInvoiceId = null;
-  await fetchSettings();
+  await fetchAppSettings();
   renderPinLoginScreen();
 }
-
+ 
 function navigate(view, opts){
   STATE.view = view;
   if(view==='invoice-form' && (!opts || !opts.keepEditing)) STATE.editingInvoiceId = null;
   renderApp();
   window.scrollTo(0,0);
 }
-
+ 
 function renderView(){
   const titles = {
     'dashboard':['Dashboard','Sales overview across all clients'],
     'invoice-form':[STATE.editingInvoiceId?'Edit Document':'New Document','Proposal, Proforma Invoice, or Tax Invoice — add fields as needed'],
     'invoices':['Documents','Tax invoices, proforma invoices, and proposals'],
     'ledger':['Client Ledger','Invoice-wise statement for a client (tax invoices only)'],
+    'ledgerbook':['Ledger Book','Traditional Debit / Credit account ledger — overall or client-wise'],
     'clients':['Clients','Manage buyers you bill'],
     'items':['Items & Services','Catalog used when building documents'],
-    'settings':['Settings','Business profile, numbering, backup'],
+    'settings':['Settings',`Business profile, numbering, backup — editing ${STATE.settings?.business_name||'this company'}`],
   };
   const [title, meta] = titles[STATE.view] || ['',''];
   document.getElementById('pageTitle').textContent = title;
@@ -817,16 +1056,17 @@ function renderView(){
   const actions = document.getElementById('topbarActions');
   actions.innerHTML = '';
   const mount = document.getElementById('mainContent');
-
+ 
   if(STATE.view==='dashboard') renderDashboard(mount, actions);
   else if(STATE.view==='invoice-form') renderInvoiceForm(mount, actions);
   else if(STATE.view==='invoices') renderInvoicesList(mount, actions);
   else if(STATE.view==='ledger') renderLedger(mount, actions);
+  else if(STATE.view==='ledgerbook') renderLedgerBook(mount, actions);
   else if(STATE.view==='clients') renderClients(mount, actions);
   else if(STATE.view==='items') renderItems(mount, actions);
   else if(STATE.view==='settings') renderSettings(mount, actions);
 }
-
+ 
 /* ============================================================
    INVOICE NUMBER GENERATOR
    ============================================================ */
@@ -861,7 +1101,7 @@ async function commitInvoiceNumberCounter(type, fy, counter){
   const patch = {};
   patch[f.counter] = counter+1;
   patch[f.lastFy] = fy;
-  await sb.from('business_settings').update(patch).eq('id','default');
+  await sb.from('business_settings').update(patch).eq('id',STATE.currentCompanyId);
   STATE.settings[f.counter] = counter+1;
   STATE.settings[f.lastFy] = fy;
 }
@@ -885,7 +1125,7 @@ function presetRange(preset){
   if(preset==='all') return {from:null, to:null};
   return {from:null, to:null};
 }
-
+ 
 function filteredInvoices(from, to, clientId){
   return STATE.invoices.filter(inv=>{
     if(!isRealInvoice(inv)) return false;
@@ -896,21 +1136,21 @@ function filteredInvoices(from, to, clientId){
     return true;
   });
 }
-
+ 
 function renderDashboard(mount, actions){
   const d = STATE.dashboardRange;
   if(d.from===null && d.to===null && d.preset==='fy'){
     const r = presetRange('fy'); d.from=r.from; d.to=r.to;
   }
   const list = filteredInvoices(d.from, d.to, d.clientId);
-
+ 
   const totalTaxable = list.reduce((s,i)=>s+Number(i.taxable_total||0),0);
   const totalGst = list.reduce((s,i)=>s+Number(i.cgst_total||0)+Number(i.sgst_total||0)+Number(i.igst_total||0),0);
   const totalInvoice = list.reduce((s,i)=>s+Number(i.grand_total||0),0);
   const totalPaid = list.reduce((s,i)=>s+Number(i.amount_paid||0),0);
   const totalDue = list.reduce((s,i)=>s+Number(i.due_amount||0),0);
   const overdueCount = list.filter(i=>i._status==='Overdue').length;
-
+ 
   // monthly buckets (last 12 months within/around range, else last 12 overall)
   const monthMap = {};
   list.forEach(inv=>{
@@ -919,19 +1159,19 @@ function renderDashboard(mount, actions){
   });
   const months = Object.keys(monthMap).sort();
   const maxVal = Math.max(1, ...months.map(m=>monthMap[m]));
-
+ 
   const topClientsMap = {};
   list.forEach(inv=>{
     const cid = inv.client_id || '_none';
     topClientsMap[cid] = (topClientsMap[cid]||0) + Number(inv.grand_total||0);
   });
   const topClients = Object.entries(topClientsMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
+ 
   const recent = [...list].sort((a,b)=> (b.invoice_date+b.created_at).localeCompare(a.invoice_date+a.created_at)).slice(0,8);
-
+ 
   actions.innerHTML = `<button class="btn btn-primary" data-nav="invoice-form">＋ New</button>`;
   actions.querySelector('[data-nav]').addEventListener('click', ()=>navigate('invoice-form'));
-
+ 
   mount.innerHTML = `
     <div class="hint" style="margin-bottom:10px;">Figures below count <b>Tax Invoices</b> only — Proposals and Proforma Invoices are excluded since they aren't confirmed sales.</div>
     <div class="card card-pad" style="margin-bottom:18px;">
@@ -957,14 +1197,14 @@ function renderDashboard(mount, actions){
         </div>
       </div>
     </div>
-
+ 
     <div class="grid grid-4" style="margin-bottom:18px;">
       <div class="kpi accent"><div class="label">Taxable Value</div><div class="value">${inr(totalTaxable)}</div><div class="sub">${list.length} invoice${list.length===1?'':'s'}</div></div>
       <div class="kpi accent"><div class="label">GST Collected</div><div class="value">${inr(totalGst)}</div><div class="sub">CGST + SGST / IGST</div></div>
       <div class="kpi good"><div class="label">Total Invoice Value</div><div class="value">${inr(totalInvoice)}</div><div class="sub">Paid: ${inr(totalPaid)}</div></div>
       <div class="kpi ${totalDue>0?'warn':'good'}"><div class="label">Outstanding</div><div class="value">${inr(totalDue)}</div><div class="sub">${overdueCount} overdue</div></div>
     </div>
-
+ 
     <div class="grid grid-2" style="align-items:start;">
       <div class="card card-pad">
         <div class="section-title">Monthly Sales</div>
@@ -984,7 +1224,7 @@ function renderDashboard(mount, actions){
           </div>
         </div>`}
       </div>
-
+ 
       <div class="card card-pad">
         <div class="section-title">Top Clients (by value)</div>
         ${topClients.length===0 ? '<div class="empty-state"><div class="big">👥</div>No data yet.</div>' : `
@@ -1003,7 +1243,7 @@ function renderDashboard(mount, actions){
         </table>`}
       </div>
     </div>
-
+ 
     <div class="card card-pad" style="margin-top:18px;">
       <div class="section-title">Recent Invoices</div>
       ${recent.length===0 ? '<div class="empty-state"><div class="big">🧾</div>No invoices yet. <br><button class="btn btn-primary" style="margin-top:10px;" data-nav="invoice-form">Create your first invoice</button></div>' : `
@@ -1027,12 +1267,12 @@ function renderDashboard(mount, actions){
       </div>`}
     </div>
   `;
-
+ 
   mount.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click', ()=>navigate(b.dataset.nav)));
   mount.querySelectorAll('[data-action="view-invoice"]').forEach(b=>{
     b.addEventListener('click', ()=>{ STATE.editingInvoiceId=b.dataset.id; navigate('invoice-form',{keepEditing:true}); });
   });
-
+ 
   document.getElementById('dashPreset').addEventListener('change', e=>{
     const p = e.target.value;
     d.preset = p;
@@ -1043,7 +1283,7 @@ function renderDashboard(mount, actions){
   document.getElementById('dashTo').addEventListener('change', e=>{ d.to = e.target.value||null; d.preset='custom'; renderView(); });
   document.getElementById('dashClient').addEventListener('change', e=>{ d.clientId = e.target.value; renderView(); });
 }
-
+ 
 function statusBadge(status){
   const map = {
     'Paid':'badge-paid', 'Partial':'badge-partial', 'Unpaid':'badge-unpaid',
@@ -1081,14 +1321,14 @@ function closeModal(){
   const m = document.getElementById('modalOverlay');
   if(m) m.remove();
 }
-
+ 
 function confirmDialog(message, onConfirm){
   const overlay = openModal('Please confirm', `<p style="font-size:13.5px;">${message}</p>`,
     `<button class="btn" data-action="close-modal">Cancel</button>
      <button class="btn btn-danger" id="confirmYes">Yes, continue</button>`);
   overlay.querySelector('#confirmYes').addEventListener('click', ()=>{ closeModal(); onConfirm(); });
 }
-
+ 
 /* ============================================================
    QUICK-ADD CLIENT MODAL
    ============================================================ */
@@ -1107,7 +1347,7 @@ function openQuickAddClient(onSaved){
     </div>
     <div class="field-row">
       <div class="field"><label>Contact Person</label><input id="qc_contact" type="text"></div>
-      <div class="field"><label>Phone</label><input id="qc_phone" type="text"></div>
+      <div class="field"><label>Phone</label><input id="qc_phone" type="tel" inputmode="tel"></div>
     </div>
     <div class="field"><label>Email</label><input id="qc_email" type="email"></div>
   `;
@@ -1128,6 +1368,7 @@ function openQuickAddClient(onSaved){
       contact_person: document.getElementById('qc_contact').value.trim(),
       phone: document.getElementById('qc_phone').value.trim(),
       email: document.getElementById('qc_email').value.trim(),
+      company_id: STATE.currentCompanyId,
     };
     const {data,error} = await sb.from('clients').insert(payload).select().single();
     if(error){ toast('Could not save client: '+error.message,'error'); return; }
@@ -1138,7 +1379,7 @@ function openQuickAddClient(onSaved){
     if(onSaved) onSaved(data);
   });
 }
-
+ 
 /* ============================================================
    QUICK-ADD ITEM MODAL
    ============================================================ */
@@ -1167,6 +1408,7 @@ function openQuickAddItem(onSaved){
       hsn: document.getElementById('qi_hsn').value.trim(),
       default_rate: parseFloat(document.getElementById('qi_rate').value)||0,
       gst_percent: parseFloat(document.getElementById('qi_gst').value)||18,
+      company_id: STATE.currentCompanyId,
     };
     const {data,error} = await sb.from('items').insert(payload).select().single();
     if(error){ toast('Could not save item: '+error.message,'error'); return; }
@@ -1182,9 +1424,10 @@ function openQuickAddItem(onSaved){
    ============================================================ */
 let DRAFT = null;
 let PRINT_INCLUDE_SIGNATURE = null;
-
+let PRINT_THEME = null;
+ 
 function addDays(iso, n){ const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
-
+ 
 function newDraftInvoice(type){
   const docTypeVal = type || 'invoice';
   const s = STATE.settings;
@@ -1218,7 +1461,7 @@ function newDraftInvoice(type){
 function newLineItem(){
   return {id:uid(), description:'', hsn:'', qty:1, rate:0, gstPercent: STATE.settings?.default_gst_percent || 18};
 }
-
+ 
 function loadDraftFromInvoice(inv){
   return {
     id: inv.id,
@@ -1247,7 +1490,7 @@ function loadDraftFromInvoice(inv){
     cancelled: !!inv.cancelled,
   };
 }
-
+ 
 /* ============================================================
    TOTALS
    ============================================================ */
@@ -1273,21 +1516,21 @@ function computeDraftTotals(draft){
   const due = grandTotal - paid;
   return {taxable, cgst, sgst, igst, rawTotal, roundOff, grandTotal, paid, due};
 }
-
+ 
 /* ============================================================
    INVOICE FORM RENDER
    ============================================================ */
 async function renderInvoiceForm(mount, actions){
   if(STATE.editingInvoiceId){
     const inv = STATE.invoices.find(i=>i.id===STATE.editingInvoiceId);
-    if(inv && (!DRAFT || DRAFT.id !== inv.id)){ DRAFT = loadDraftFromInvoice(inv); PRINT_INCLUDE_SIGNATURE = null; }
+    if(inv && (!DRAFT || DRAFT.id !== inv.id)){ DRAFT = loadDraftFromInvoice(inv); PRINT_INCLUDE_SIGNATURE = null; PRINT_THEME = null; }
   } else if(!DRAFT || DRAFT.id){
     DRAFT = newDraftInvoice(STATE.newDocType);
     const gen = await generateInvoiceNumber(DRAFT.doc_type);
     DRAFT.invoice_no = gen.no;
     DRAFT._genFy = gen.fy; DRAFT._genCounter = gen.counter;
   }
-
+ 
   const meta = DOC_TYPES[DRAFT.doc_type];
   const isNew = !DRAFT.id;
   const convertButtons = [];
@@ -1297,11 +1540,15 @@ async function renderInvoiceForm(mount, actions){
   } else if(DRAFT.id && DRAFT.doc_type==='proforma'){
     convertButtons.push(`<button class="btn btn-navy" data-action="convert-doc" data-target="invoice">↷ To Tax Invoice</button>`);
   }
-
+ 
   if(DRAFT.id && PRINT_INCLUDE_SIGNATURE===null) PRINT_INCLUDE_SIGNATURE = !!STATE.settings.show_signature_default;
-
+  if(DRAFT.id && PRINT_THEME===null) PRINT_THEME = STATE.settings.print_theme || 'classic';
+ 
   actions.innerHTML = `
     ${DRAFT.id ? `
+      <select id="f_print_theme" style="width:auto;padding:8px 10px;font-size:12.5px;">
+        ${Object.keys(PDF_THEMES).map(k=>`<option value="${k}" ${PRINT_THEME===k?'selected':''}>${PDF_THEMES[k].name}</option>`).join('')}
+      </select>
       <label class="checkbox-row" style="margin:0;padding:0 4px;">
         <input type="checkbox" id="f_include_sig" ${PRINT_INCLUDE_SIGNATURE?'checked':''}>
         <span style="font-size:12.5px;color:var(--text-muted);">Include signature</span>
@@ -1311,22 +1558,22 @@ async function renderInvoiceForm(mount, actions){
     <button class="btn" data-action="cancel-form">Cancel</button>
     <button class="btn btn-primary" data-action="save-invoice">💾 Save</button>
   `;
-
+ 
   const clientOptions = STATE.clients.map(c=>`<option value="${c.id}" ${DRAFT.client_id===c.id?'selected':''}>${escapeHtml(c.name)}</option>`).join('');
-
+ 
   const docPickerHtml = isNew ? `
     <div class="doctype-picker">
       ${Object.keys(DOC_TYPES).map(k=>`<button data-doctype="${k}" class="${DRAFT.doc_type===k?'active':''}">${DOC_TYPES[k].label}</button>`).join('')}
     </div>` : `<div style="margin-bottom:14px;">${docTypeBadge(DRAFT)}</div>`;
-
+ 
   const isProposal = DRAFT.doc_type==='proposal';
   const isProforma = DRAFT.doc_type==='proforma';
   const dateFieldLabel = DRAFT.doc_type==='invoice' ? 'Due Date' : 'Valid Until';
   const dateFieldValue = DRAFT.doc_type==='invoice' ? DRAFT.due_date : DRAFT.valid_until;
-
+ 
   mount.innerHTML = `
     ${docPickerHtml}
-    <div class="grid" style="grid-template-columns:1fr 320px;gap:18px;align-items:start;">
+    <div class="invoice-form-grid">
       <div>
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">${meta.label} Details</div>
@@ -1356,11 +1603,11 @@ async function renderInvoiceForm(mount, actions){
               </select>
             </div>` : ''}
           </div>
-
+ 
           <div id="customFieldsList" class="custom-fields-list" style="margin-top:8px;"></div>
           <button class="btn btn-sm" data-action="add-custom-field">＋ Add Field</button>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Bill To</div>
           <div class="field-row">
@@ -1371,7 +1618,7 @@ async function renderInvoiceForm(mount, actions){
             <div style="padding-top:22px;"><button class="btn btn-sm" data-action="add-client-inline">＋ New</button></div>
           </div>
           <div id="clientPreview" class="hint"></div>
-
+ 
           <div class="checkbox-row" style="margin-top:14px;">
             <input type="checkbox" id="f_ship_same" ${DRAFT.ship_same_as_bill?'checked':''}>
             <label style="margin:0;" for="f_ship_same">Ship To same as Bill To</label>
@@ -1385,7 +1632,7 @@ async function renderInvoiceForm(mount, actions){
             </div>
           </div>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Line Items</div>
           <div class="table-wrap">
@@ -1404,13 +1651,13 @@ async function renderInvoiceForm(mount, actions){
           </div>
           <button class="btn btn-sm" style="margin-top:10px;" data-action="add-line-item">＋ Add Item</button>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Terms &amp; Notes</div>
           <div class="field"><label>Terms &amp; Conditions</label><textarea id="f_terms" rows="4">${escapeHtml(DRAFT.terms)}</textarea></div>
           <div class="field"><label>Internal Notes (not printed)</label><textarea id="f_notes" rows="2">${escapeHtml(DRAFT.notes)}</textarea></div>
         </div>
-
+ 
         ${isProposal ? `
         <div class="card card-pad">
           <div class="hint">Proposals don't track payments. Convert to a Proforma or Tax Invoice once accepted to start recording payments.</div>
@@ -1433,8 +1680,8 @@ async function renderInvoiceForm(mount, actions){
           <button class="btn btn-sm" data-action="add-payment" style="margin-top:10px;">＋ Record Payment</button>
         </div>`}
       </div>
-
-      <div style="position:sticky;top:80px;">
+ 
+      <div class="invoice-form-side" style="position:sticky;top:80px;">
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Totals</div>
           <div id="totalsPanel"></div>
@@ -1453,22 +1700,22 @@ async function renderInvoiceForm(mount, actions){
         </div>
       </div>
     </div>
-
+ 
     <div class="sticky-bottom-bar">
       <div><div class="amt-label">${isProposal?'Estimated Total':'Grand Total'}</div><div class="amt" id="stickyTotalAmt">₹0.00</div></div>
       <button class="btn btn-primary" data-action="save-invoice">💾 Save</button>
     </div>
   `;
-
+ 
   renderCustomFields();
   renderLineItems();
   renderTotalsPanel();
   updateClientPreview();
   if(DRAFT.id) renderPaymentsLog();
-
+ 
   bindInvoiceFormEvents(mount, actions);
 }
-
+ 
 function renderCustomFields(){
   const wrap = document.getElementById('customFieldsList');
   if(!wrap) return;
@@ -1484,7 +1731,7 @@ function renderCustomFields(){
     DRAFT.custom_fields.splice(parseInt(btn.dataset.idx,10),1); renderCustomFields();
   }));
 }
-
+ 
 function renderLineItems(){
   const body = document.getElementById('lineItemsBody');
   if(!body) return;
@@ -1508,7 +1755,7 @@ function renderLineItems(){
       <td><button class="btn btn-sm btn-ghost" data-action="remove-line-item" data-idx="${idx}" ${DRAFT.line_items.length<=1?'disabled':''}>✕</button></td>
     </tr>`;
   }).join('');
-
+ 
   body.querySelectorAll('[data-li="itemPick"]').forEach(sel=>sel.addEventListener('change', e=>{
     const idx = parseInt(e.target.dataset.idx,10);
     const it = itemById(e.target.value);
@@ -1538,14 +1785,14 @@ function renderLineItems(){
     DRAFT.line_items.splice(parseInt(btn.dataset.idx,10),1); renderLineItems(); renderTotalsPanel();
   }));
 }
-
+ 
 function updateLineItemTaxableCell(idx){
   const li = DRAFT.line_items[idx];
   const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
   const cell = document.getElementById('taxableCell-'+idx);
   if(cell) cell.textContent = inr(taxable);
 }
-
+ 
 function renderTotalsPanel(){
   const panel = document.getElementById('totalsPanel');
   if(!panel) return;
@@ -1570,7 +1817,7 @@ function renderTotalsPanel(){
   const stickyAmt = document.getElementById('stickyTotalAmt');
   if(stickyAmt) stickyAmt.textContent = inr(t.grandTotal);
 }
-
+ 
 function renderPaymentsLog(){
   const wrap = document.getElementById('paymentsLogList');
   if(!wrap) return;
@@ -1583,14 +1830,14 @@ function renderPaymentsLog(){
     renderPaymentsLog(); renderTotalsPanel();
   }));
 }
-
+ 
 function updateClientPreview(){
   const el = document.getElementById('clientPreview');
   if(!el) return;
   const c = clientById(DRAFT.client_id);
   el.innerHTML = c ? `${escapeHtml(c.address||'')} ${c.city?', '+escapeHtml(c.city):''} ${c.state?', '+escapeHtml(c.state):''}<br>GSTIN: ${escapeHtml(c.gstin||'—')} | PAN: ${escapeHtml(c.pan||'—')}` : '';
 }
-
+ 
 function bindInvoiceFormEvents(mount, actions){
   document.getElementById('f_invoice_no').addEventListener('input', e=>DRAFT.invoice_no=e.target.value);
   document.getElementById('f_invoice_date').addEventListener('change', e=>DRAFT.invoice_date=e.target.value);
@@ -1622,14 +1869,14 @@ function bindInvoiceFormEvents(mount, actions){
   });
   const manualRound = document.getElementById('f_manual_round');
   if(manualRound) manualRound.addEventListener('input', e=>{ DRAFT.manual_round_off = e.target.value; renderTotalsPanel(); });
-
+ 
   const payAmt = document.getElementById('f_pay_amount');
   if(payAmt){
     payAmt.addEventListener('input', e=>{ DRAFT.initial_payment.amount = e.target.value; renderTotalsPanel(); });
     document.getElementById('f_pay_mode').addEventListener('change', e=>DRAFT.initial_payment.mode=e.target.value);
     document.getElementById('f_pay_date').addEventListener('change', e=>DRAFT.initial_payment.date=e.target.value);
   }
-
+ 
   mount.querySelectorAll('[data-doctype]').forEach(btn=>btn.addEventListener('click', async ()=>{
     const type = btn.dataset.doctype;
     if(type===DRAFT.doc_type) return;
@@ -1639,7 +1886,7 @@ function bindInvoiceFormEvents(mount, actions){
     DRAFT.invoice_no = gen.no; DRAFT._genFy = gen.fy; DRAFT._genCounter = gen.counter;
     renderInvoiceForm(mount, actions);
   }));
-
+ 
   mount.querySelector('[data-action="add-custom-field"]').addEventListener('click', ()=>{
     DRAFT.custom_fields.push({label:'',value:''}); renderCustomFields();
   });
@@ -1651,20 +1898,22 @@ function bindInvoiceFormEvents(mount, actions){
   });
   const addPayBtn = mount.querySelector('[data-action="add-payment"]');
   if(addPayBtn) addPayBtn.addEventListener('click', ()=>openRecordPaymentModal());
-
+ 
   actions.querySelectorAll('[data-action="cancel-form"]').forEach(b=>b.addEventListener('click', ()=>{ DRAFT=null; navigate('invoices'); }));
   document.querySelectorAll('[data-action="save-invoice"]').forEach(b=>b.addEventListener('click', ()=>saveInvoice()));
   const sigCheck = document.getElementById('f_include_sig');
   if(sigCheck) sigCheck.addEventListener('change', e=>{ PRINT_INCLUDE_SIGNATURE = e.target.checked; });
+  const themeSelect = document.getElementById('f_print_theme');
+  if(themeSelect) themeSelect.addEventListener('change', e=>{ PRINT_THEME = e.target.value; });
   const printBtn = actions.querySelector('[data-action="print-current"]');
-  if(printBtn) printBtn.addEventListener('click', ()=>printInvoiceById(DRAFT.id, PRINT_INCLUDE_SIGNATURE));
+  if(printBtn) printBtn.addEventListener('click', ()=>printInvoiceById(DRAFT.id, PRINT_INCLUDE_SIGNATURE, PRINT_THEME));
   actions.querySelectorAll('[data-action="convert-doc"]').forEach(b=>b.addEventListener('click', ()=>{
     confirmDialog(`Create a new ${DOC_TYPES[b.dataset.target].label} from this ${DOC_TYPES[DRAFT.doc_type].label}? A fresh number will be generated and this original stays unchanged.`, ()=>{
       convertDocument(DRAFT.id, b.dataset.target);
     });
   }));
 }
-
+ 
 function openRecordPaymentModal(){
   const body = `
     <div class="field"><label>Amount (₹)</label><input id="rp_amount" type="number" step="0.01"></div>
@@ -1686,7 +1935,7 @@ function openRecordPaymentModal(){
     renderPaymentsLog(); renderTotalsPanel();
   });
 }
-
+ 
 /* ============================================================
    SAVE INVOICE
    ============================================================ */
@@ -1694,10 +1943,11 @@ async function saveInvoice(){
   if(!DRAFT.client_id){ toast('Please select a client','error'); return; }
   if(!DRAFT.invoice_no.trim()){ toast(`${DOC_TYPES[DRAFT.doc_type].label} number is required`,'error'); return; }
   if(DRAFT.line_items.every(li=>!li.description.trim())){ toast('Add at least one line item','error'); return; }
-
+ 
   const t = computeDraftTotals(DRAFT);
   const isProposal = DRAFT.doc_type==='proposal';
   const payload = {
+    company_id: STATE.currentCompanyId,
     doc_type: DRAFT.doc_type,
     invoice_no: DRAFT.invoice_no.trim(),
     invoice_date: DRAFT.invoice_date,
@@ -1727,14 +1977,14 @@ async function saveInvoice(){
     payments_log: isProposal ? [] : DRAFT.payments_log,
     updated_at: new Date().toISOString(),
   };
-
+ 
   if(!isProposal && !DRAFT.id && Number(DRAFT.initial_payment.amount)>0){
     payload.payments_log = [...DRAFT.payments_log, {
       date: DRAFT.initial_payment.date, amount: Number(DRAFT.initial_payment.amount),
       mode: DRAFT.initial_payment.mode, note: DRAFT.initial_payment.note||'Initial payment'
     }];
   }
-
+ 
   let result;
   if(DRAFT.id){
     result = await sb.from('invoices').update(payload).eq('id', DRAFT.id).select().single();
@@ -1742,11 +1992,11 @@ async function saveInvoice(){
     result = await sb.from('invoices').insert(payload).select().single();
   }
   if(result.error){ toast('Save failed: '+result.error.message,'error'); return; }
-
+ 
   if(!DRAFT.id && DRAFT._genFy){
     await commitInvoiceNumberCounter(DRAFT.doc_type, DRAFT._genFy, DRAFT._genCounter);
   }
-
+ 
   toast(DRAFT.id ? `${DOC_TYPES[DRAFT.doc_type].label} updated` : `${DOC_TYPES[DRAFT.doc_type].label} saved`, 'success');
   DRAFT = null;
   STATE.editingInvoiceId = null;
@@ -1761,7 +2011,7 @@ function renderInvoicesList(mount, actions){
     <button class="btn" data-action="export-invoices-excel">⬇ Export Excel</button>`;
   actions.querySelector('[data-nav]').addEventListener('click', ()=>navigate('invoice-form'));
   actions.querySelector('[data-action="export-invoices-excel"]').addEventListener('click', exportInvoicesExcel);
-
+ 
   const f = STATE.invoiceFilter;
   const statusOptionsByType = {
     all: ['all','Paid','Partial','Unpaid','Overdue','Draft','Sent','Accepted','Rejected','Expired','Cancelled'],
@@ -1770,7 +2020,7 @@ function renderInvoicesList(mount, actions){
     invoice: ['all','Paid','Partial','Unpaid','Overdue','Cancelled'],
   };
   const statusOptions = statusOptionsByType[f.docType] || statusOptionsByType.all;
-
+ 
   mount.innerHTML = `
     <div class="btn-row" style="margin-bottom:14px;">
       ${['all','proposal','proforma','invoice'].map(t=>`
@@ -1799,7 +2049,7 @@ function renderInvoicesList(mount, actions){
     </div>
     <div id="invoicesTableWrap"></div>
   `;
-
+ 
   mount.querySelectorAll('[data-doctype-filter]').forEach(b=>b.addEventListener('click', ()=>{
     f.docType = b.dataset.doctypeFilter; f.status='all'; renderInvoicesList(mount, actions);
   }));
@@ -1808,10 +2058,10 @@ function renderInvoicesList(mount, actions){
   document.getElementById('invStatusFilter').addEventListener('change', e=>{ f.status=e.target.value; renderInvoicesTable(); });
   document.getElementById('invFrom').addEventListener('change', e=>{ f.from=e.target.value||null; renderInvoicesTable(); });
   document.getElementById('invTo').addEventListener('change', e=>{ f.to=e.target.value||null; renderInvoicesTable(); });
-
+ 
   renderInvoicesTable();
 }
-
+ 
 function getFilteredInvoicesForList(){
   const f = STATE.invoiceFilter;
   return STATE.invoices.filter(inv=>{
@@ -1828,7 +2078,7 @@ function getFilteredInvoicesForList(){
     return true;
   });
 }
-
+ 
 function renderInvoicesTable(){
   const wrap = document.getElementById('invoicesTableWrap');
   const list = getFilteredInvoicesForList();
@@ -1904,7 +2154,7 @@ function renderInvoicesTable(){
     });
   }));
 }
-
+ 
 function convertDocument(id, targetType){
   const inv = STATE.invoices.find(i=>i.id===id);
   if(!inv) return;
@@ -1929,7 +2179,7 @@ function duplicateInvoice(id){
   if(!inv) return;
   convertDocument(id, docType(inv));
 }
-
+ 
 function exportInvoicesExcel(){
   const list = getFilteredInvoicesForList();
   if(list.length===0){ toast('No documents to export','error'); return; }
@@ -1963,10 +2213,10 @@ function exportInvoicesExcel(){
 function renderLedger(mount, actions){
   const lf = STATE.ledgerFilter;
   if(!lf.clientId && STATE.clients.length) lf.clientId = STATE.clients[0].id;
-
+ 
   actions.innerHTML = `<button class="btn" data-action="ledger-export-excel">⬇ Export Excel</button>
     <button class="btn btn-navy" data-action="ledger-print">🖨 Print / PDF</button>`;
-
+ 
   mount.innerHTML = `
     <div class="card card-pad" style="margin-bottom:16px;">
       <div class="toolbar" style="margin-bottom:0;">
@@ -1985,16 +2235,16 @@ function renderLedger(mount, actions){
     </div>
     <div id="ledgerContent"></div>
   `;
-
+ 
   document.getElementById('ledgerClient').addEventListener('change', e=>{ lf.clientId=e.target.value; renderLedgerContent(); });
   document.getElementById('ledgerFrom').addEventListener('change', e=>{ lf.from=e.target.value||null; renderLedgerContent(); });
   document.getElementById('ledgerTo').addEventListener('change', e=>{ lf.to=e.target.value||null; renderLedgerContent(); });
   actions.querySelector('[data-action="ledger-export-excel"]').addEventListener('click', exportLedgerExcel);
   actions.querySelector('[data-action="ledger-print"]').addEventListener('click', printLedger);
-
+ 
   renderLedgerContent();
 }
-
+ 
 function getLedgerInvoices(){
   const lf = STATE.ledgerFilter;
   return STATE.invoices
@@ -2005,7 +2255,7 @@ function getLedgerInvoices(){
     .filter(inv=> !lf.to || inv.invoice_date <= lf.to)
     .sort((a,b)=> a.invoice_date.localeCompare(b.invoice_date));
 }
-
+ 
 function ledgerTotals(list){
   return {
     qty: list.reduce((s,i)=>s+(i.line_items||[]).reduce((a,li)=>a+(Number(li.qty)||0),0),0),
@@ -2018,20 +2268,20 @@ function ledgerTotals(list){
     paid: list.reduce((s,i)=>s+Number(i.amount_paid||0),0),
   };
 }
-
+ 
 function itemSummary(inv){
   const lis = inv.line_items||[];
   if(lis.length===0) return '—';
   if(lis.length===1) return escapeHtml(lis[0].description);
   return escapeHtml(lis[0].description) + ` +${lis.length-1} more`;
 }
-
+ 
 function renderLedgerContent(){
   const wrap = document.getElementById('ledgerContent');
   const lf = STATE.ledgerFilter;
   const list = getLedgerInvoices();
   const showClientCol = lf.clientId==='all';
-
+ 
   if(list.length===0){
     wrap.innerHTML = `<div class="card card-pad"><div class="empty-state"><div class="big">📒</div><h3>No invoices in this range</h3></div></div>`;
     return;
@@ -2039,7 +2289,7 @@ function renderLedgerContent(){
   const t = ledgerTotals(list);
   const outstanding = t.total - t.paid;
   const c = lf.clientId!=='all' ? clientById(lf.clientId) : null;
-
+ 
   wrap.innerHTML = `
     <div class="card card-pad" style="margin-bottom:16px;">
       <div class="section-title">${c ? escapeHtml(c.name) : 'All Clients — Combined Ledger'}</div>
@@ -2088,7 +2338,7 @@ function renderLedgerContent(){
       </tbody>
     </table>
     </div>
-
+ 
     <div class="card card-pad" style="margin-top:16px;">
       <div class="section-title">Summary</div>
       <div class="grid grid-2">
@@ -2108,7 +2358,7 @@ function renderLedgerContent(){
     </div>
   `;
 }
-
+ 
 function exportLedgerExcel(){
   const list = getLedgerInvoices();
   if(list.length===0){ toast('No data to export','error'); return; }
@@ -2140,14 +2390,14 @@ function exportLedgerExcel(){
   totalRow['CGST']=t.cgst; totalRow['SGST']=t.sgst; totalRow['IGST']=t.igst;
   totalRow['Round Off']=t.roundOff; totalRow['Total Invoice']=t.total; totalRow['Amount Paid']=t.paid; totalRow['Status']='';
   rows.push(totalRow);
-
+ 
   const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
   const c = lf.clientId!=='all' ? clientById(lf.clientId) : null;
   XLSX.utils.book_append_sheet(wb, ws, 'Ledger');
   XLSX.writeFile(wb, `Ledger_${c?c.name.replace(/[^a-z0-9]/gi,'_'):'All_Clients'}_${todayISO()}.xlsx`);
 }
-
+ 
 function printLedger(){
   const list = getLedgerInvoices();
   if(list.length===0){ toast('No data to print','error'); return; }
@@ -2157,7 +2407,7 @@ function printLedger(){
   const outstanding = t.total - t.paid;
   const c = lf.clientId!=='all' ? clientById(lf.clientId) : null;
   const s = STATE.settings;
-
+ 
   const html = `
     <div class="pdoc">
       <div class="ledger-print-head">
@@ -2207,26 +2457,257 @@ function printLedger(){
   `;
   document.getElementById('printLedgerArea').innerHTML = html;
   document.body.classList.add('print-ledger');
+  setDownloadFilename(`Ledger_${(c?c.name:'All_Clients')}_${todayISO()}`);
   setTimeout(()=>window.print(), 80);
+}
+const ORIGINAL_DOC_TITLE = document.title;
+function setDownloadFilename(name){
+  document.title = String(name||'Document').replace(/[\\/:*?"<>|]/g,'-').replace(/\s+/g,' ').trim();
 }
 window.addEventListener('afterprint', ()=>{
   document.body.classList.remove('print-ledger');
   document.body.classList.remove('print-invoice');
+  document.title = ORIGINAL_DOC_TITLE;
 });
+ 
+/* ============================================================
+   LEDGER BOOK — traditional Debit/Credit running-balance ledger
+   ============================================================ */
+function formatBalance(bal){
+  if(Math.abs(bal) < 0.005) return inr(0) + ' —';
+  return bal > 0 ? inr(bal) + ' Dr' : inr(Math.abs(bal)) + ' Cr';
+}
+ 
+function buildLedgerTransactions(clientId, from, to){
+  let invs = STATE.invoices.filter(inv=>isRealInvoice(inv) && !inv.cancelled);
+  if(clientId!=='all') invs = invs.filter(inv=>inv.client_id===clientId);
+ 
+  const entries = [];
+  invs.forEach(inv=>{
+    const c = clientById(inv.client_id);
+    entries.push({
+      date: inv.invoice_date,
+      sortKey: inv.invoice_date + '_0_' + inv.invoice_no,
+      particulars: `To Sales A/c — Invoice ${inv.invoice_no}`,
+      voucher: inv.invoice_no,
+      clientName: c ? c.name : '—',
+      debit: Number(inv.grand_total)||0,
+      credit: 0,
+    });
+    (inv.payments_log||[]).forEach(p=>{
+      const pd = p.date || inv.invoice_date;
+      entries.push({
+        date: pd,
+        sortKey: pd + '_1_' + inv.invoice_no,
+        particulars: `By ${p.mode||'Payment'} received — against ${inv.invoice_no}${p.note && p.note!=='Imported' && p.note!=='Initial payment' ? ' ('+p.note+')' : ''}`,
+        voucher: inv.invoice_no,
+        clientName: c ? c.name : '—',
+        debit: 0,
+        credit: Number(p.amount)||0,
+      });
+    });
+  });
+  entries.sort((a,b)=> a.sortKey.localeCompare(b.sortKey));
+ 
+  let openingBalance = 0;
+  const inRange = [];
+  entries.forEach(e=>{
+    if(from && e.date < from){ openingBalance += e.debit - e.credit; }
+    else if(to && e.date > to){ /* after range, excluded */ }
+    else { inRange.push(e); }
+  });
+ 
+  let running = openingBalance;
+  const rows = inRange.map(e=>{
+    running += e.debit - e.credit;
+    return {...e, balance: running};
+  });
+ 
+  return {openingBalance, rows, closingBalance: running};
+}
+ 
+function renderLedgerBook(mount, actions){
+  const f = STATE.ledgerBookFilter;
+  actions.innerHTML = `<button class="btn" data-action="ledgerbook-export-excel">⬇ Export Excel</button>
+    <button class="btn btn-navy" data-action="ledgerbook-print">🖨 Print / PDF</button>`;
+ 
+  mount.innerHTML = `
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="toolbar" style="margin-bottom:0;">
+        <div class="toolbar-left">
+          <select id="lbClient">
+            <option value="all">Overall (All Clients)</option>
+            ${STATE.clients.map(c=>`<option value="${c.id}" ${f.clientId===c.id?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="toolbar-right">
+          <input type="date" id="lbFrom" value="${f.from||''}" style="width:150px;">
+          <span style="color:var(--text-muted);">to</span>
+          <input type="date" id="lbTo" value="${f.to||''}" style="width:150px;">
+        </div>
+      </div>
+    </div>
+    <div id="lbContent"></div>
+  `;
+ 
+  document.getElementById('lbClient').addEventListener('change', e=>{ f.clientId=e.target.value; renderLedgerBookContent(); });
+  document.getElementById('lbFrom').addEventListener('change', e=>{ f.from=e.target.value||null; renderLedgerBookContent(); });
+  document.getElementById('lbTo').addEventListener('change', e=>{ f.to=e.target.value||null; renderLedgerBookContent(); });
+  actions.querySelector('[data-action="ledgerbook-export-excel"]').addEventListener('click', exportLedgerBookExcel);
+  actions.querySelector('[data-action="ledgerbook-print"]').addEventListener('click', printLedgerBook);
+ 
+  renderLedgerBookContent();
+}
+ 
+function renderLedgerBookContent(){
+  const wrap = document.getElementById('lbContent');
+  const f = STATE.ledgerBookFilter;
+  const overall = f.clientId==='all';
+  const {openingBalance, rows, closingBalance} = buildLedgerTransactions(f.clientId, f.from, f.to);
+  const c = overall ? null : clientById(f.clientId);
+ 
+  if(rows.length===0 && Math.abs(openingBalance)<0.005){
+    wrap.innerHTML = `<div class="card card-pad"><div class="empty-state"><div class="big">📗</div><h3>No transactions in this range</h3></div></div>`;
+    return;
+  }
+ 
+  const totalDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const totalCredit = rows.reduce((s,r)=>s+r.credit,0);
+ 
+  wrap.innerHTML = `
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="section-title">${overall ? 'Overall Ledger — All Clients' : escapeHtml(c ? c.name : '—')}</div>
+      ${c ? `<div class="hint">${escapeHtml(c.address||'')} ${c.city?', '+escapeHtml(c.city):''}<br>GSTIN: ${escapeHtml(c.gstin||'—')} | PAN: ${escapeHtml(c.pan||'—')}</div>` : `<div class="hint">Combined Debit/Credit account across every client — sorted chronologically.</div>`}
+    </div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Particulars</th>${overall?'<th>Client</th>':''}<th>Voucher</th><th>Debit (₹)</th><th>Credit (₹)</th><th>Balance</th>
+      </tr></thead>
+      <tbody>
+        <tr style="background:var(--grey-bg);font-weight:600;">
+          <td>${f.from?fmtDate(f.from):'—'}</td>
+          <td colspan="${overall?2:1}">Opening Balance</td>
+          <td></td><td class="num"></td><td class="num"></td>
+          <td class="num">${formatBalance(openingBalance)}</td>
+        </tr>
+        ${rows.map(r=>`<tr>
+          <td>${fmtDate(r.date)}</td>
+          <td>${escapeHtml(r.particulars)}</td>
+          ${overall?`<td>${escapeHtml(r.clientName)}</td>`:''}
+          <td style="font-family:var(--font-mono);">${escapeHtml(r.voucher)}</td>
+          <td class="num">${r.debit>0.004?inr(r.debit):''}</td>
+          <td class="num">${r.credit>0.004?inr(r.credit):''}</td>
+          <td class="num">${formatBalance(r.balance)}</td>
+        </tr>`).join('')}
+        <tr class="tfoot-row">
+          <td colspan="${overall?3:2}">TOTAL</td>
+          <td></td>
+          <td class="num">${inr(totalDebit)}</td>
+          <td class="num">${inr(totalCredit)}</td>
+          <td class="num">${formatBalance(closingBalance)}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="card card-pad" style="margin-top:16px;">
+      <div class="grid grid-2">
+        <table><tbody>
+          <tr><td>Opening Balance</td><td class="num">${formatBalance(openingBalance)}</td></tr>
+          <tr><td>Total Debit (Invoiced)</td><td class="num">${inr(totalDebit)}</td></tr>
+        </tbody></table>
+        <table><tbody>
+          <tr><td>Total Credit (Received)</td><td class="num">${inr(totalCredit)}</td></tr>
+          <tr><td>Closing Balance</td><td class="num" style="font-weight:700;color:${closingBalance>0.004?'var(--red)':'var(--green)'};">${formatBalance(closingBalance)}</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  `;
+}
+ 
+function exportLedgerBookExcel(){
+  const f = STATE.ledgerBookFilter;
+  const overall = f.clientId==='all';
+  const {openingBalance, rows, closingBalance} = buildLedgerTransactions(f.clientId, f.from, f.to);
+  const c = overall ? null : clientById(f.clientId);
+  if(rows.length===0){ toast('No transactions to export','error'); return; }
+ 
+  const excelRows = [];
+  const openingRow = {'Date': f.from||'', 'Particulars': 'Opening Balance', 'Voucher': '', 'Debit': '', 'Credit': '', 'Balance': formatBalance(openingBalance).replace('₹','Rs. ')};
+  if(overall) openingRow['Client'] = '';
+  excelRows.push(openingRow);
+  rows.forEach(r=>{
+    const row = {'Date': r.date, 'Particulars': r.particulars};
+    if(overall) row['Client'] = r.clientName;
+    row['Voucher'] = r.voucher;
+    row['Debit'] = r.debit>0.004 ? r.debit : '';
+    row['Credit'] = r.credit>0.004 ? r.credit : '';
+    row['Balance'] = formatBalance(r.balance).replace('₹','Rs. ');
+    excelRows.push(row);
+  });
+  const ws = XLSX.utils.json_to_sheet(excelRows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Ledger Book');
+  XLSX.writeFile(wb, `LedgerBook_${overall?'All_Clients':(c?c.name.replace(/[^a-z0-9]/gi,'_'):'Client')}_${todayISO()}.xlsx`);
+}
+ 
+function printLedgerBook(){
+  const f = STATE.ledgerBookFilter;
+  const overall = f.clientId==='all';
+  const {openingBalance, rows, closingBalance} = buildLedgerTransactions(f.clientId, f.from, f.to);
+  const c = overall ? null : clientById(f.clientId);
+  if(rows.length===0){ toast('No transactions to print','error'); return; }
+  const s = STATE.settings;
+  const totalDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const totalCredit = rows.reduce((s,r)=>s+r.credit,0);
+ 
+  const html = `
+    <div class="pdoc">
+      <div class="ledger-print-head">
+        <h2 style="color:#fff;text-decoration:none;text-align:left;margin:0;">${escapeHtml(s.business_name)}</h2>
+        <div style="font-size:11px;opacity:.9;">${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')} | GSTIN: ${escapeHtml(s.gstin||'')}</div>
+      </div>
+      <h3 style="margin:0 0 4px;">LEDGER BOOK ${overall ? '(All Clients)' : '— '+escapeHtml(c?c.name:'')}</h3>
+      <div style="font-size:11px;color:#555;margin-bottom:14px;">
+        Period: ${f.from?fmtDate(f.from):'Beginning'} to ${f.to?fmtDate(f.to):'Today'}
+      </div>
+      <table class="items">
+        <thead><tr>
+          <th>Date</th><th>Particulars</th>${overall?'<th>Client</th>':''}<th>Voucher</th><th>Debit</th><th>Credit</th><th>Balance</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#eee;font-weight:700;">
+            <td>${f.from?fmtDate(f.from):'—'}</td><td colspan="${overall?2:1}">Opening Balance</td><td></td><td></td><td></td>
+            <td style="text-align:right;">${formatBalance(openingBalance)}</td>
+          </tr>
+          ${rows.map(r=>`<tr>
+            <td>${fmtDate(r.date)}</td><td>${escapeHtml(r.particulars)}</td>
+            ${overall?`<td>${escapeHtml(r.clientName)}</td>`:''}
+            <td>${escapeHtml(r.voucher)}</td>
+            <td style="text-align:right;">${r.debit>0.004?inr(r.debit):''}</td>
+            <td style="text-align:right;">${r.credit>0.004?inr(r.credit):''}</td>
+            <td style="text-align:right;">${formatBalance(r.balance)}</td>
+          </tr>`).join('')}
+          <tr style="font-weight:700;background:#eee;">
+            <td colspan="${overall?3:2}">TOTAL</td><td></td>
+            <td style="text-align:right;">${inr(totalDebit)}</td>
+            <td style="text-align:right;">${inr(totalCredit)}</td>
+            <td style="text-align:right;">${formatBalance(closingBalance)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;font-size:11.5px;">Closing Balance: <b>${formatBalance(closingBalance)}</b></p>
+    </div>
+  `;
+  document.getElementById('printLedgerArea').innerHTML = html;
+  document.body.classList.add('print-ledger');
+  setDownloadFilename(`LedgerBook_${overall?'All_Clients':(c?c.name:'Client')}_${todayISO()}`);
+  setTimeout(()=>window.print(), 80);
+}
+ 
 /* ============================================================
    INVOICE PRINT TEMPLATE
    ============================================================ */
-function printStatusPill(status){
-  const colors = {
-    'Paid':['#E6F4EA','#1E7B34'], 'Partial':['#FFF4DD','#9A6B00'], 'Unpaid':['#FCEAEA','#B3261E'],
-    'Overdue':['#F8D7D5','#7A1712'], 'Cancelled':['#EEF1F5','#5B6B7A'],
-    'Draft':['#EEF1F5','#5B6B7A'], 'Sent':['#EAF1FB','#2E75B6'], 'Accepted':['#E6F4EA','#1E7B34'],
-    'Rejected':['#FCEAEA','#B3261E'], 'Expired':['#F8D7D5','#7A1712'],
-  };
-  const [bg,fg] = colors[status] || colors['Unpaid'];
-  return `<span style="display:inline-block;padding:3px 12px;border-radius:5px;font-size:11px;font-weight:700;background:${bg};color:${fg};vertical-align:middle;">${escapeHtml(status)}</span>`;
-}
-
 function groupLineItemsByHsn(lineItems, showIgst){
   const map = {};
   lineItems.forEach(li=>{
@@ -2241,8 +2722,8 @@ function groupLineItemsByHsn(lineItems, showIgst){
   });
   return Object.values(map);
 }
-
-function printInvoiceById(id, includeSignature){
+ 
+function printInvoiceById(id, includeSignature, themeKey){
   const inv = STATE.invoices.find(i=>i.id===id);
   if(!inv){ toast('Save the document first, then print.','error'); return; }
   const s = STATE.settings;
@@ -2253,58 +2734,73 @@ function printInvoiceById(id, includeSignature){
   const meta = DOC_TYPES[type];
   const isProposal = type==='proposal';
   const showSig = includeSignature===undefined ? !!s.show_signature_default : !!includeSignature;
+  const theme = themeKey || s.print_theme || 'classic';
+  const themeConf = PDF_THEMES[theme] || PDF_THEMES.classic;
+  const isLetterhead = themeConf.layout==='letterhead';
   const hsnGroups = groupLineItemsByHsn(lis, showIgst);
   const totalTax = Number(inv.cgst_total||0)+Number(inv.sgst_total||0)+Number(inv.igst_total||0);
-
+ 
   const customFieldsHtml = (inv.custom_fields||[]).filter(f=>f.label).map(f=>
     `<tr><td style="padding:2px 0;">${escapeHtml(f.label)}</td><td style="padding:2px 0;"><b>${escapeHtml(f.value)}</b></td></tr>`).join('');
-
-  const html = `
-    <div class="pdoc2">
-      <table class="ph-headrow"><tr>
-        <td style="width:50%;">
+ 
+  const infoFieldsHtml = `
+    <div><span class="ph-label">${meta.label} No #</span><br><b>${escapeHtml(inv.invoice_no)}</b></div>
+    <div><span class="ph-label">${meta.label} Date</span><br><b>${fmtDate(inv.invoice_date)}</b></div>
+    ${inv.po_number?`<div><span class="ph-label">PO Number</span><br><b>${escapeHtml(inv.po_number)}</b></div>`:''}
+    ${type==='invoice' && inv.due_date?`<div><span class="ph-label">Due Date</span><br><b>${fmtDate(inv.due_date)}</b></div>`:''}
+    ${type!=='invoice' && inv.valid_until?`<div><span class="ph-label">Valid Until</span><br><b>${fmtDate(inv.valid_until)}</b></div>`:''}
+    ${inv.order_no?`<div><span class="ph-label">Order No</span><br><b>${escapeHtml(inv.order_no)}</b></div>`:''}
+    ${inv.dispatched_through?`<div><span class="ph-label">Dispatched Through</span><br><b>${escapeHtml(inv.dispatched_through)}</b></div>`:''}
+    ${customFieldsHtml ? `<table style="margin-top:6px;font-size:9.5px;">${customFieldsHtml}</table>` : ''}
+  `;
+ 
+  const billedToHtml = c ? `<b class="ph-strong">${escapeHtml(c.name)}</b><br>
+    ${escapeHtml(c.address||'')}<br>
+    ${escapeHtml([c.city, c.state, c.pincode].filter(Boolean).join(', '))}<br>
+    ${c.contact_person?`Cont. ${escapeHtml(c.contact_person)}<br>`:''}
+    GSTIN: <b>${escapeHtml(c.gstin||'—')}</b><br>
+    PAN: <b>${escapeHtml(c.pan||'—')}</b>` : '—';
+ 
+  const shipToHtml = inv.ship_same_as_bill
+    ? (c ? `<b class="ph-strong">${escapeHtml(c.name)}</b><br>
+      ${escapeHtml(c.address||'')}<br>
+      ${escapeHtml([c.city, c.state, c.pincode].filter(Boolean).join(', '))}` : '—')
+    : `${inv.ship_to?.address?`<b class="ph-strong">${escapeHtml(inv.ship_to.address)}</b><br>`:'—'}
+      ${escapeHtml([inv.ship_to?.city, inv.ship_to?.state, inv.ship_to?.pincode].filter(Boolean).join(', '))}`;
+ 
+  const headerBillingHtml = isLetterhead ? `
+      <table class="ph-letterhead-row"><tr>
+        <td style="width:58%;vertical-align:top;">
           ${s.logo_data_url ? `<img src="${s.logo_data_url}" class="ph-logo">` : `<div class="ph-bizname">${escapeHtml(s.business_name||'')}</div>`}
+          <div class="ph-letterhead-info">
+            <b class="ph-strong">${escapeHtml(s.business_name||'')}</b><br>
+            ${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')}<br>
+            GSTIN: <b>${escapeHtml(s.gstin||'')}</b> &nbsp; PAN: <b>${escapeHtml(s.pan||'')}</b><br>
+            ${s.email?`${escapeHtml(s.email)} `:''}${s.phone?`&nbsp; ${escapeHtml(s.phone)}`:''}
+          </div>
         </td>
-        <td style="width:50%;text-align:right;vertical-align:top;">
-          <div class="ph-doctitle">${meta.short} ${printStatusPill(inv._status||'Unpaid')}</div>
+        <td style="width:42%;text-align:right;vertical-align:top;">
+          <div class="ph-doctitle">${meta.label}</div>
+          <div class="ph-letterhead-meta">${infoFieldsHtml}</div>
         </td>
       </tr></table>
-
-
+ 
+      <div class="ph-outline-wrap">
       <table class="ph-info">
         <tr>
-          <td class="ph-info-col">
-            <div><span class="ph-label">${meta.label} No #</span><br><b>${escapeHtml(inv.invoice_no)}</b></div>
-            <div><span class="ph-label">${meta.label} Date</span><br><b>${fmtDate(inv.invoice_date)}</b></div>
-            ${inv.po_number?`<div><span class="ph-label">PO Number</span><br><b>${escapeHtml(inv.po_number)}</b></div>`:''}
-            ${type==='invoice' && inv.due_date?`<div><span class="ph-label">Due Date</span><br><b>${fmtDate(inv.due_date)}</b></div>`:''}
-            ${type!=='invoice' && inv.valid_until?`<div><span class="ph-label">Valid Until</span><br><b>${fmtDate(inv.valid_until)}</b></div>`:''}
-            ${inv.order_no?`<div><span class="ph-label">Order No</span><br><b>${escapeHtml(inv.order_no)}</b></div>`:''}
-            ${inv.dispatched_through?`<div><span class="ph-label">Dispatched Through</span><br><b>${escapeHtml(inv.dispatched_through)}</b></div>`:''}
-            ${customFieldsHtml ? `<table style="margin-top:6px;font-size:11px;">${customFieldsHtml}</table>` : ''}
-          </td>
-          <td class="ph-box">
-            <div class="ph-box-label">Billed By</div>
-            <b>${escapeHtml(s.business_name||'')}</b><br>
-            ${escapeHtml(s.address_line1||'')}<br>
-            ${escapeHtml(s.address_line2||'')}<br>
-            GSTIN: <b>${escapeHtml(s.gstin||'')}</b><br>
-            PAN: <b>${escapeHtml(s.pan||'')}</b><br>
-            ${s.email?`Email: <b>${escapeHtml(s.email)}</b><br>`:''}
-            ${s.phone?`Phone: <b>${escapeHtml(s.phone)}</b>`:''}
-          </td>
-          <td class="ph-box">
+          <td class="ph-box ph-box-letterhead">
             <div class="ph-box-label">Billed To</div>
-            ${c ? `<b>${escapeHtml(c.name)}</b><br>
-            ${escapeHtml(c.address||'')}<br>
-            ${escapeHtml([c.city, c.state, c.pincode].filter(Boolean).join(', '))}<br>
-            ${c.contact_person?`Cont. ${escapeHtml(c.contact_person)}<br>`:''}
-            GSTIN: <b>${escapeHtml(c.gstin||'—')}</b><br>
-            PAN: <b>${escapeHtml(c.pan||'—')}</b>` : '—'}
+            ${billedToHtml}
+          </td>
+          <td class="ph-box ph-box-letterhead">
+            <div class="ph-box-label">Ship To</div>
+            ${shipToHtml}
           </td>
         </tr>
       </table>
-
+ 
+      <table class="ph-spacer-row"><tr><td>&nbsp;</td></tr></table>
+ 
       <table class="ph-items">
         <thead><tr>
           <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th><th>GST Rate</th><th>Qty</th><th>Rate</th><th>Amount</th>
@@ -2327,7 +2823,72 @@ function printInvoiceById(id, includeSignature){
           }).join('')}
         </tbody>
       </table>
-
+      </div>
+  ` : `
+      <table class="ph-headrow"><tr>
+        <td style="width:50%;">
+          ${s.logo_data_url ? `<img src="${s.logo_data_url}" class="ph-logo">` : `<div class="ph-bizname">${escapeHtml(s.business_name||'')}</div>`}
+        </td>
+        <td style="width:50%;text-align:right;vertical-align:top;">
+          <div class="ph-doctitle">${meta.label}</div>
+        </td>
+      </tr></table>
+ 
+ 
+      <div class="ph-outline-wrap">
+      <table class="ph-info">
+        <tr>
+          <td class="ph-info-col">
+            ${infoFieldsHtml}
+          </td>
+          <td class="ph-box ph-box-billed">
+            <div class="ph-box-label">Billed By</div>
+            <b class="ph-strong">${escapeHtml(s.business_name||'')}</b><br>
+            ${escapeHtml(s.address_line1||'')}<br>
+            ${escapeHtml(s.address_line2||'')}<br>
+            GSTIN: <b>${escapeHtml(s.gstin||'')}</b><br>
+            PAN: <b>${escapeHtml(s.pan||'')}</b><br>
+            ${s.email?`Email: <b>${escapeHtml(s.email)}</b><br>`:''}
+            ${s.phone?`Phone: <b>${escapeHtml(s.phone)}</b>`:''}
+          </td>
+          <td class="ph-box ph-box-billed">
+            <div class="ph-box-label">Billed To</div>
+            ${billedToHtml}
+          </td>
+        </tr>
+      </table>
+ 
+      <table class="ph-spacer-row"><tr><td>&nbsp;</td></tr></table>
+ 
+      <table class="ph-items">
+        <thead><tr>
+          <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th><th>GST Rate</th><th>Qty</th><th>Rate</th><th>Amount</th>
+          <th>CGST</th><th>SGST</th>${showIgst?'<th>IGST</th>':''}<th>Total</th>
+        </tr></thead>
+        <tbody>
+          ${lis.map((li,idx)=>{
+            const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
+            const gstAmt = taxable*(Number(li.gstPercent)||0)/100;
+            const cgst = showIgst?0:gstAmt/2, sgst = showIgst?0:gstAmt/2, igst = showIgst?gstAmt:0;
+            const total = taxable+cgst+sgst+igst;
+            return `<tr>
+              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td><td>${escapeHtml(li.hsn||'')}</td>
+              <td style="text-align:right;">${li.gstPercent}%</td>
+              <td style="text-align:right;">${li.qty}</td><td style="text-align:right;">${inr(li.rate)}</td>
+              <td style="text-align:right;">${inr(taxable)}</td><td style="text-align:right;">${inr(cgst)}</td>
+              <td style="text-align:right;">${inr(sgst)}</td>${showIgst?`<td style="text-align:right;">${inr(igst)}</td>`:''}
+              <td style="text-align:right;">${inr(total)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      </div>
+  `;
+ 
+  const html = `
+    <div class="pdoc2" style="${pdfThemeVars(theme)}">
+      ${headerBillingHtml}
+ 
       <table class="ph-stack-totals">
         <tr><td>Amount</td><td>${inr(inv.taxable_total)}</td></tr>
         <tr><td>CGST</td><td>${inr(inv.cgst_total)}</td></tr>
@@ -2338,22 +2899,22 @@ function printInvoiceById(id, includeSignature){
         ${!isProposal ? `<tr class="strong"><td>Amount Paid</td><td>(${inr(inv.amount_paid)})</td></tr>` : ''}
         ${!isProposal && Number(inv.due_amount)>0.004 ? `<tr class="strong" style="color:#b3261e;"><td>Due</td><td>${inr(inv.due_amount)}</td></tr>` : ''}
       </table>
-
+ 
       <table class="ph-terms-bank"><tr>
         <td class="ph-box">
           <div class="ph-box-label">Terms and Conditions</div>
-          <div style="white-space:pre-line;font-size:11px;line-height:1.6;">${escapeHtml(inv.terms||'—')}</div>
+          <div style="white-space:pre-line;">${escapeHtml(inv.terms||'—')}</div>
         </td>
         <td class="ph-box">
           <div class="ph-box-label">Bank Details</div>
-          Account Name <b>${escapeHtml(s.account_name||'')}</b><br>
-          Account Number <b>${escapeHtml(s.account_number||'')}</b><br>
-          IFSC <b>${escapeHtml(s.ifsc||'')}</b><br>
-          Account Type <b>${escapeHtml(s.account_type||'')}</b><br>
-          Bank <b>${escapeHtml(s.bank_name||'')}</b>
+          Account Name - ${escapeHtml(s.account_name||'')}<br>
+          Account Number - ${escapeHtml(s.account_number||'')}<br>
+          IFSC - ${escapeHtml(s.ifsc||'')}<br>
+          Account Type - ${escapeHtml(s.account_type||'')}<br>
+          Bank - ${escapeHtml(s.bank_name||'')}
         </td>
       </tr></table>
-
+ 
       ${hsnGroups.length ? `
       <table class="ph-hsn">
         <thead><tr>
@@ -2368,7 +2929,7 @@ function printInvoiceById(id, includeSignature){
                        : `<td style="text-align:center;">${(g.gstPercent/2)}%</td><td style="text-align:right;">${inr(g.cgst)}</td><td style="text-align:center;">${(g.gstPercent/2)}%</td><td style="text-align:right;">${inr(g.sgst)}</td>`}
             <td style="text-align:right;">${inr(g.taxable+g.cgst+g.sgst+g.igst)}</td>
           </tr>`).join('')}
-          <tr style="font-weight:700;background:#f2f2f2;">
+          <tr style="border-top:1.5px solid #333;color:#1F4E5F;">
             <td>Total</td><td style="text-align:right;">${inr(inv.taxable_total)}</td>
             ${showIgst ? `<td></td><td style="text-align:right;">${inr(inv.igst_total)}</td>`
                        : `<td></td><td style="text-align:right;">${inr(inv.cgst_total)}</td><td></td><td style="text-align:right;">${inr(inv.sgst_total)}</td>`}
@@ -2378,35 +2939,38 @@ function printInvoiceById(id, includeSignature){
       </table>
       <div class="ph-tax-words">Total Tax In Words: ${numberToWordsINR(totalTax).toUpperCase()} RUPEES ${(totalTax%1===0)?'':'AND '+Math.round((totalTax%1)*100)+' PAISE '}ONLY</div>
       ` : ''}
-
+ 
       <div class="ph-footer">
         ${showSig ? `
           <div class="ph-sig-block">
-            <div class="ph-sig-name">${escapeHtml(s.signatory_name||'')}</div>
+            ${s.signature_image_url
+              ? `<img src="${s.signature_image_url}" class="ph-sig-img">`
+              : `<div class="ph-sig-name">${escapeHtml(s.signatory_name||'')}</div>`}
             <div class="ph-sig-title">${escapeHtml(s.signatory_title||'Authorised Signatory')}</div>
           </div>
-        ` : `<p style="text-align:center;font-size:10.5px;color:#666;">This is an electronically generated document, no signature is required.</p>`}
+        ` : `<p style="text-align:center;font-size:9px;color:#666;">This is an electronically generated document, no signature is required.</p>`}
       </div>
     </div>
   `;
   document.getElementById('printInvoiceArea').innerHTML = html;
   document.body.classList.add('print-invoice');
+  setDownloadFilename(`${meta.short}_${inv.invoice_no}`);
   setTimeout(()=>window.print(), 80);
 }
-
-
+ 
+ 
 /* ============================================================
    CLIENTS VIEW
    ============================================================ */
 function renderClients(mount, actions){
   actions.innerHTML = `<button class="btn btn-primary" data-action="new-client">＋ New Client</button>`;
   actions.querySelector('[data-action="new-client"]').addEventListener('click', ()=>openClientEditModal(null));
-
+ 
   if(STATE.clients.length===0){
     mount.innerHTML = `<div class="card card-pad"><div class="empty-state"><div class="big">👥</div><h3>No clients yet</h3><p>Add your first client to start billing.</p></div></div>`;
     return;
   }
-
+ 
   mount.innerHTML = `
     <div class="table-wrap">
     <table class="responsive-cards">
@@ -2452,7 +3016,7 @@ function renderClients(mount, actions){
     });
   }));
 }
-
+ 
 function openClientEditModal(client){
   const isNew = !client;
   client = client || {name:'',gstin:'',pan:'',address:'',city:'',state:'',pincode:'',contact_person:'',phone:'',email:''};
@@ -2470,7 +3034,7 @@ function openClientEditModal(client){
     </div>
     <div class="field-row">
       <div class="field"><label>Contact Person</label><input id="ec_contact" type="text" value="${escapeHtml(client.contact_person||'')}"></div>
-      <div class="field"><label>Phone</label><input id="ec_phone" type="text" value="${escapeHtml(client.phone||'')}"></div>
+      <div class="field"><label>Phone</label><input id="ec_phone" type="tel" inputmode="tel" value="${escapeHtml(client.phone||'')}"></div>
     </div>
     <div class="field"><label>Email</label><input id="ec_email" type="email" value="${escapeHtml(client.email||'')}"></div>
   `;
@@ -2491,19 +3055,20 @@ function openClientEditModal(client){
       phone: document.getElementById('ec_phone').value.trim(),
       email: document.getElementById('ec_email').value.trim(),
     };
+    if(isNew) payload.company_id = STATE.currentCompanyId;
     const result = isNew ? await sb.from('clients').insert(payload) : await sb.from('clients').update(payload).eq('id', client.id);
     if(result.error){ toast('Failed: '+result.error.message,'error'); return; }
     closeModal(); await fetchClients(); renderView(); toast('Client saved','success');
   });
 }
-
+ 
 /* ============================================================
    ITEMS VIEW
    ============================================================ */
 function renderItems(mount, actions){
   actions.innerHTML = `<button class="btn btn-primary" data-action="new-item">＋ New Item</button>`;
   actions.querySelector('[data-action="new-item"]').addEventListener('click', ()=>openItemEditModal(null));
-
+ 
   if(STATE.items.length===0){
     mount.innerHTML = `<div class="card card-pad"><div class="empty-state"><div class="big">◆</div><h3>No items yet</h3><p>Add items or services you commonly bill for.</p></div></div>`;
     return;
@@ -2538,7 +3103,7 @@ function renderItems(mount, actions){
     });
   }));
 }
-
+ 
 function openItemEditModal(item){
   const isNew = !item;
   item = item || {name:'',hsn:'',default_rate:0,gst_percent:18};
@@ -2562,6 +3127,7 @@ function openItemEditModal(item){
       default_rate: parseFloat(document.getElementById('ei_rate').value)||0,
       gst_percent: parseFloat(document.getElementById('ei_gst').value)||18,
     };
+    if(isNew) payload.company_id = STATE.currentCompanyId;
     const result = isNew ? await sb.from('items').insert(payload) : await sb.from('items').update(payload).eq('id', item.id);
     if(result.error){ toast('Failed: '+result.error.message,'error'); return; }
     closeModal(); await fetchItems(); renderView(); toast('Item saved','success');
@@ -2599,10 +3165,23 @@ function renderSettings(mount, actions){
         </div>
         <div class="field-row">
           <div class="field"><label>Email</label><input id="s_email" type="email" value="${escapeHtml(s.email||'')}"></div>
-          <div class="field"><label>Phone</label><input id="s_phone" type="text" value="${escapeHtml(s.phone||'')}"></div>
+          <div class="field"><label>Phone</label><input id="s_phone" type="tel" inputmode="tel" value="${escapeHtml(s.phone||'')}"></div>
         </div>
         <div class="field"><label>Signatory Name</label><input id="s_sig_name" type="text" value="${escapeHtml(s.signatory_name||'')}"></div>
         <div class="field"><label>Signatory Title</label><input id="s_sig_title" type="text" value="${escapeHtml(s.signatory_title||'')}"></div>
+        <div class="field">
+          <label>Signature Image (optional)</label>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div id="sigPreviewWrap" style="width:110px;height:56px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fafafa;">
+              ${s.signature_image_url ? `<img src="${s.signature_image_url}" style="max-width:100%;max-height:100%;">` : `<span style="font-size:10px;color:var(--text-muted);">No signature</span>`}
+            </div>
+            <div class="btn-row">
+              <label class="btn btn-sm" style="margin:0;">Upload<input type="file" id="sigFile" accept="image/*" style="display:none;"></label>
+              ${s.signature_image_url ? `<button class="btn btn-sm btn-danger" data-action="remove-signature">Remove</button>` : ''}
+            </div>
+          </div>
+          <div class="hint">A photo/scan of your actual signature (transparent or white background works best). If not uploaded, a styled text signature is used instead.</div>
+        </div>
         <div class="checkbox-row" style="margin-bottom:12px;">
           <input type="checkbox" id="s_sig_default" ${s.show_signature_default?'checked':''}>
           <label style="margin:0;" for="s_sig_default">Show signature block by default when printing</label>
@@ -2610,7 +3189,7 @@ function renderSettings(mount, actions){
         <div class="hint" style="margin-bottom:12px;">You can still switch it on/off per document from the Print button — this is just the starting default. When off, the print footer shows "electronically generated, no signature required" instead.</div>
         <button class="btn btn-primary" data-action="save-profile">Save Profile</button>
       </div>
-
+ 
       <div>
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Bank Details</div>
@@ -2623,7 +3202,7 @@ function renderSettings(mount, actions){
           <div class="field"><label>Bank Name</label><input id="s_bank_name" type="text" value="${escapeHtml(s.bank_name||'')}"></div>
           <button class="btn btn-primary" data-action="save-bank">Save Bank Details</button>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Document Numbering</div>
           <div class="field-row">
@@ -2650,13 +3229,13 @@ function renderSettings(mount, actions){
           </div>
           <button class="btn btn-primary" data-action="save-numbering">Save Numbering</button>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Default Terms &amp; Conditions</div>
           <textarea id="s_terms" rows="4">${escapeHtml(s.terms||'')}</textarea>
           <button class="btn btn-primary" style="margin-top:10px;" data-action="save-terms">Save Terms</button>
         </div>
-
+ 
         <div class="card card-pad" style="margin-bottom:16px;">
           <div class="section-title">Security</div>
           <div class="field-row">
@@ -2665,7 +3244,13 @@ function renderSettings(mount, actions){
           </div>
           <button class="btn" data-action="change-pin">Update PIN</button>
         </div>
-
+ 
+        <div class="card card-pad" style="margin-bottom:16px;">
+          <div class="section-title">PDF Theme</div>
+          <p class="hint" style="margin-bottom:12px;">Pick a default look for printed Proposals, Proforma Invoices, and Tax Invoices. You can still switch it per document from the Print button.</p>
+          <div id="themePickerGrid" class="theme-picker-grid"></div>
+        </div>
+ 
         <div class="card card-pad">
           <div class="section-title">Backup &amp; Restore</div>
           <p class="hint" style="margin-bottom:12px;">Data already lives in Supabase (synced across devices). Use this to keep an offline copy or move data between projects.</p>
@@ -2677,7 +3262,7 @@ function renderSettings(mount, actions){
       </div>
     </div>
   `;
-
+ 
   document.querySelector('[data-action="save-profile"]').addEventListener('click', async ()=>{
     const payload = {
       business_name: document.getElementById('s_business_name').value.trim(),
@@ -2693,7 +3278,7 @@ function renderSettings(mount, actions){
     };
     await saveSettingsPatch(payload, 'Profile saved');
   });
-
+ 
   const logoFile = document.getElementById('logoFile');
   if(logoFile) logoFile.addEventListener('change', e=>{
     const file = e.target.files[0];
@@ -2711,7 +3296,25 @@ function renderSettings(mount, actions){
     await saveSettingsPatch({logo_data_url:null}, 'Logo removed');
     renderView();
   });
-
+ 
+  const sigFile = document.getElementById('sigFile');
+  if(sigFile) sigFile.addEventListener('change', e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    if(file.size > 800*1024){ toast('Please use an image under 800KB','error'); return; }
+    const reader = new FileReader();
+    reader.onload = async ev=>{
+      await saveSettingsPatch({signature_image_url: ev.target.result}, 'Signature saved');
+      renderView();
+    };
+    reader.readAsDataURL(file);
+  });
+  const removeSigBtn = document.querySelector('[data-action="remove-signature"]');
+  if(removeSigBtn) removeSigBtn.addEventListener('click', async ()=>{
+    await saveSettingsPatch({signature_image_url:null}, 'Signature removed');
+    renderView();
+  });
+ 
   document.querySelector('[data-action="save-bank"]').addEventListener('click', async ()=>{
     const payload = {
       account_name: document.getElementById('s_acc_name').value.trim(),
@@ -2722,7 +3325,7 @@ function renderSettings(mount, actions){
     };
     await saveSettingsPatch(payload, 'Bank details saved');
   });
-
+ 
   document.querySelector('[data-action="save-numbering"]').addEventListener('click', async ()=>{
     const payload = {
       invoice_prefix: document.getElementById('s_prefix').value.trim(),
@@ -2737,32 +3340,68 @@ function renderSettings(mount, actions){
     };
     await saveSettingsPatch(payload, 'Numbering saved');
   });
-
+ 
   document.querySelector('[data-action="save-terms"]').addEventListener('click', async ()=>{
     await saveSettingsPatch({terms: document.getElementById('s_terms').value}, 'Terms saved');
   });
-
+ 
   document.querySelector('[data-action="change-pin"]').addEventListener('click', async ()=>{
     const p1 = document.getElementById('s_new_pin').value.trim();
     const p2 = document.getElementById('s_confirm_pin').value.trim();
     if(p1.length<4){ toast('PIN must be at least 4 digits','error'); return; }
     if(p1!==p2){ toast('PINs do not match','error'); return; }
     const hash = await sha256Hex(p1);
-    await saveSettingsPatch({pin_hash:hash}, 'PIN updated');
+    const {error} = await sb.from('app_settings').upsert({id:'app', pin_hash:hash});
+    if(error){ toast('Failed: '+error.message,'error'); return; }
+    STATE.appSettings = STATE.appSettings || {};
+    STATE.appSettings.pin_hash = hash;
+    toast('PIN updated (applies app-wide, across all companies)','success');
     document.getElementById('s_new_pin').value=''; document.getElementById('s_confirm_pin').value='';
   });
-
+ 
   document.querySelector('[data-action="export-backup"]').addEventListener('click', exportFullBackup);
   document.getElementById('importFile').addEventListener('change', importFullBackup);
+ 
+  renderThemePicker();
 }
-
+ 
+function renderThemePicker(){
+  const grid = document.getElementById('themePickerGrid');
+  if(!grid) return;
+  const current = STATE.settings.print_theme || 'classic';
+  grid.innerHTML = Object.keys(PDF_THEMES).map(key=>{
+    const t = PDF_THEMES[key];
+    const active = key===current;
+    return `
+    <button class="theme-swatch ${active?'active':''}" data-theme-pick="${key}">
+      <div class="theme-swatch-preview">
+        <div class="theme-swatch-bar" style="background:${t.headerBg};"></div>
+        <div class="theme-swatch-lines">
+          <span style="background:${t.primary};width:60%;"></span>
+          <span style="background:#ddd;width:85%;"></span>
+          <span style="background:#ddd;width:70%;"></span>
+        </div>
+      </div>
+      <div class="theme-swatch-name">${t.name}</div>
+      ${active?'<div class="theme-swatch-check">✓ Selected</div>':''}
+    </button>`;
+  }).join('');
+  grid.querySelectorAll('[data-theme-pick]').forEach(btn=>btn.addEventListener('click', async ()=>{
+    await saveSettingsPatch({print_theme: btn.dataset.themePick}, 'PDF theme saved');
+    renderThemePicker();
+  }));
+}
+ 
 async function saveSettingsPatch(payload, msg){
-  const {error} = await sb.from('business_settings').update(payload).eq('id','default');
+  const {error} = await sb.from('business_settings').update(payload).eq('id',STATE.currentCompanyId);
   if(error){ toast('Failed: '+error.message,'error'); return; }
   Object.assign(STATE.settings, payload);
+  const c = STATE.companies.find(x=>x.id===STATE.currentCompanyId);
+  if(c && payload.business_name) c.business_name = payload.business_name;
+  if(c && 'logo_data_url' in payload) c.logo_data_url = payload.logo_data_url;
   toast(msg,'success');
 }
-
+ 
 function exportFullBackup(){
   const data = {
     exported_at: new Date().toISOString(),
@@ -2778,7 +3417,7 @@ function exportFullBackup(){
   a.click();
   URL.revokeObjectURL(url);
 }
-
+ 
 function importFullBackup(e){
   const file = e.target.files[0];
   if(!file) return;
@@ -2786,10 +3425,63 @@ function importFullBackup(e){
   reader.onload = async ev=>{
     try{
       const data = JSON.parse(ev.target.result);
-      confirmDialog(`This will insert ${data.clients?.length||0} clients, ${data.items?.length||0} items, and ${data.invoices?.length||0} invoices into your Supabase project. Existing records are not overwritten. Continue?`, async ()=>{
-        if(data.clients?.length){ await sb.from('clients').upsert(data.clients); }
-        if(data.items?.length){ await sb.from('items').upsert(data.items); }
-        if(data.invoices?.length){ await sb.from('invoices').upsert(data.invoices); }
+      const importClients = data.clients || [];
+      const importItems = data.items || [];
+      const importInvoices = data.invoices || [];
+ 
+      // Match imported clients against existing ones by name (case/space-insensitive)
+      // so re-imports and overlapping batches don't create duplicate client rows.
+      const norm = s => (s||'').trim().toLowerCase().replace(/\s+/g,' ');
+      const existingByName = {};
+      STATE.clients.forEach(c=>{ existingByName[norm(c.name)] = c.id; });
+ 
+      const clientIdRemap = {};
+      const clientsToInsert = [];
+      let matchedCount = 0;
+      importClients.forEach(c=>{
+        const key = norm(c.name);
+        if(existingByName[key]){
+          clientIdRemap[c.id] = existingByName[key];
+          matchedCount++;
+        } else {
+          clientIdRemap[c.id] = c.id;
+          clientsToInsert.push(c);
+          existingByName[key] = c.id; // guard against dupes within the same file
+        }
+      });
+ 
+      const existingItemNames = new Set(STATE.items.map(it=>norm(it.name)));
+      const itemsToInsert = [];
+      importItems.forEach(it=>{
+        const key = norm(it.name);
+        if(!existingItemNames.has(key)){ itemsToInsert.push(it); existingItemNames.add(key); }
+      });
+ 
+      const existingInvoiceNos = new Set(STATE.invoices.map(inv=>norm(inv.invoice_no)));
+      const invoicesToInsert = importInvoices.filter(inv=>!existingInvoiceNos.has(norm(inv.invoice_no)));
+      const skippedInvoices = importInvoices.length - invoicesToInsert.length;
+ 
+      const msg = `This will insert ${clientsToInsert.length} new client${clientsToInsert.length===1?'':'s'}`
+        + (matchedCount ? ` (${matchedCount} matched existing clients by name and will be reused, not duplicated)` : '')
+        + `, ${itemsToInsert.length} item${itemsToInsert.length===1?'':'s'}, and ${invoicesToInsert.length} invoice${invoicesToInsert.length===1?'':'s'}`
+        + (skippedInvoices ? ` (${skippedInvoices} skipped — invoice number already exists)` : '')
+        + ` into your Supabase project. Existing records are not overwritten. Continue?`;
+ 
+      confirmDialog(msg, async ()=>{
+        if(clientsToInsert.length){
+          await sb.from('clients').upsert(clientsToInsert.map(c=>({...c, company_id: STATE.currentCompanyId})));
+        }
+        if(itemsToInsert.length){
+          await sb.from('items').upsert(itemsToInsert.map(it=>({...it, company_id: STATE.currentCompanyId})));
+        }
+        if(invoicesToInsert.length){
+          const remapped = invoicesToInsert.map(inv=>({
+            ...inv,
+            client_id: clientIdRemap[inv.client_id] || inv.client_id,
+            company_id: STATE.currentCompanyId,
+          }));
+          await sb.from('invoices').upsert(remapped);
+        }
         await fetchAll();
         renderView();
         toast('Backup imported','success');
@@ -2799,23 +3491,24 @@ function importFullBackup(e){
   reader.readAsText(file);
   e.target.value = '';
 }
-
+ 
 /* ============================================================
    BOOT
    ============================================================ */
 async function boot(){
   if(!initSupabase()){ renderConfigError(); return; }
-  const settings = await fetchSettings();
-  if(!settings){ renderConfigError(); return; }
-  STATE.settings = settings;
-  if(!settings.pin_hash){ renderSetPinScreen(); }
+  await fetchCompanies();
+  const appSettings = await fetchAppSettings();
+  if(!appSettings || !appSettings.pin_hash){ renderSetPinScreen(); }
   else { renderPinLoginScreen(); }
 }
-
+ 
 document.addEventListener('DOMContentLoaded', boot);
-
+ 
 </script>
-
-
+ 
+ 
 </body>
 </html>
+ 
+
