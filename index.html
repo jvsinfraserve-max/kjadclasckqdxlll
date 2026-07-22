@@ -733,11 +733,17 @@ const PDF_THEMES = {
     font:"'Calibri','Carlito',sans-serif", primary:'#1F4E5F', border:'#333', borderW:'1px',
     headerBg:'#2E75B6', headerText:'#fff', transform:'uppercase', layout:'letterhead',
   },
+  billofsupply: {
+    name:'Bill of Supply (Teal)', swatch:'#0F766E',
+    font:"'Calibri','Carlito',sans-serif", primary:'#0F766E', border:'#0F766E', borderW:'1px',
+    headerBg:'#0F766E', headerText:'#fff', transform:'uppercase',
+  },
 };
-function pdfThemeVars(themeKey){
-  const t = PDF_THEMES[themeKey] || PDF_THEMES.classic;
+function pdfThemeVars(themeKey, overrides){
+  const t = {...(PDF_THEMES[themeKey] || PDF_THEMES.classic), ...(overrides||{})};
   return `--ph-font:${t.font};--ph-primary:${t.primary};--ph-border:${t.border};--ph-border-w:${t.borderW};--ph-header-bg:${t.headerBg};--ph-header-text:${t.headerText};--ph-transform:${t.transform};`;
 }
+const BILL_OF_SUPPLY_ACCENT = {primary:'#9A6B00', border:'#9A6B00', headerBg:'#B7791F', headerText:'#fff'};
  
 function recomputeInvoiceStatuses(){
   const today = todayISO();
@@ -1459,7 +1465,8 @@ function newDraftInvoice(type){
   };
 }
 function newLineItem(){
-  return {id:uid(), description:'', hsn:'', qty:1, rate:0, gstPercent: STATE.settings?.default_gst_percent || 18};
+  const gstOn = STATE.settings?.gst_registered!==false;
+  return {id:uid(), description:'', hsn:'', qty:1, rate:0, gstPercent: gstOn ? (STATE.settings?.default_gst_percent || 18) : 0};
 }
  
 function loadDraftFromInvoice(inv){
@@ -1542,7 +1549,10 @@ async function renderInvoiceForm(mount, actions){
   }
  
   if(DRAFT.id && PRINT_INCLUDE_SIGNATURE===null) PRINT_INCLUDE_SIGNATURE = !!STATE.settings.show_signature_default;
-  if(DRAFT.id && PRINT_THEME===null) PRINT_THEME = STATE.settings.print_theme || 'classic';
+  if(DRAFT.id && PRINT_THEME===null){
+    const isBillOfSupplyDraft = DRAFT.doc_type==='invoice' && STATE.settings.gst_registered===false;
+    PRINT_THEME = isBillOfSupplyDraft ? 'billofsupply' : (STATE.settings.print_theme || 'classic');
+  }
  
   actions.innerHTML = `
     ${DRAFT.id ? `
@@ -1588,13 +1598,14 @@ async function renderInvoiceForm(mount, actions){
             <div class="field"><label>Dispatched Through</label><input id="f_dispatched" type="text" value="${escapeHtml(DRAFT.dispatched_through)}"></div>
           </div>
           <div class="field-row">
+            ${STATE.settings.gst_registered!==false ? `
             <div class="field">
               <label>Supply Type</label>
               <select id="f_supply_type">
                 <option value="intra" ${DRAFT.supply_type==='intra'?'selected':''}>Intra-state (CGST + SGST)</option>
                 <option value="inter" ${DRAFT.supply_type==='inter'?'selected':''}>Inter-state (IGST)</option>
               </select>
-            </div>
+            </div>` : ''}
             ${isProposal ? `
             <div class="field">
               <label>Proposal Status</label>
@@ -1642,7 +1653,7 @@ async function renderInvoiceForm(mount, actions){
               <th style="width:90px;">HSN/SAC</th>
               <th style="width:70px;">Qty</th>
               <th style="width:100px;">Rate (₹)</th>
-              <th style="width:75px;">GST %</th>
+              ${STATE.settings.gst_registered!==false ? '<th style="width:75px;">GST %</th>' : ''}
               <th style="width:110px;">Taxable</th>
               <th style="width:40px;"></th>
             </tr></thead>
@@ -1735,6 +1746,8 @@ function renderCustomFields(){
 function renderLineItems(){
   const body = document.getElementById('lineItemsBody');
   if(!body) return;
+  const gstOn = STATE.settings.gst_registered!==false;
+  if(!gstOn) DRAFT.line_items.forEach(li=>li.gstPercent=0);
   const itemOptions = `<option value="">— custom —</option>` + STATE.items.map(it=>`<option value="${it.id}">${escapeHtml(it.name)}</option>`).join('');
   body.innerHTML = DRAFT.line_items.map((li,idx)=>{
     const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
@@ -1746,11 +1759,11 @@ function renderLineItems(){
       <td data-label="HSN/SAC"><input type="text" data-li="hsn" data-idx="${idx}" value="${escapeHtml(li.hsn)}"></td>
       <td data-label="Qty"><input type="number" data-li="qty" data-idx="${idx}" value="${li.qty}" step="0.01" min="0"></td>
       <td data-label="Rate (₹)"><input type="number" data-li="rate" data-idx="${idx}" value="${li.rate}" step="0.01" min="0"></td>
-      <td data-label="GST %">
+      ${gstOn ? `<td data-label="GST %">
         <select data-li="gstPercent" data-idx="${idx}">
           ${[0,5,12,18,28].map(g=>`<option value="${g}" ${Number(li.gstPercent)===g?'selected':''}>${g}%</option>`).join('')}
         </select>
-      </td>
+      </td>` : ''}
       <td class="num" data-label="Taxable" id="taxableCell-${idx}">${inr(taxable)}</td>
       <td><button class="btn btn-sm btn-ghost" data-action="remove-line-item" data-idx="${idx}" ${DRAFT.line_items.length<=1?'disabled':''}>✕</button></td>
     </tr>`;
@@ -1763,7 +1776,7 @@ function renderLineItems(){
       DRAFT.line_items[idx].description = it.name;
       DRAFT.line_items[idx].hsn = it.hsn||'';
       DRAFT.line_items[idx].rate = Number(it.default_rate)||0;
-      DRAFT.line_items[idx].gstPercent = Number(it.gst_percent)||18;
+      DRAFT.line_items[idx].gstPercent = gstOn ? (Number(it.gst_percent)||18) : 0;
     }
     renderLineItems(); renderTotalsPanel();
   }));
@@ -1798,12 +1811,13 @@ function renderTotalsPanel(){
   if(!panel) return;
   const t = computeDraftTotals(DRAFT);
   const isProposal = DRAFT.doc_type==='proposal';
+  const gstOn = STATE.settings.gst_registered!==false;
   const totalLabel = isProposal ? 'Estimated Total' : 'Grand Total';
-  const gstLabel = DRAFT.supply_type==='inter' ? [['IGST', t.igst]] : [['CGST', t.cgst],['SGST', t.sgst]];
+  const gstLabel = !gstOn ? [] : (DRAFT.supply_type==='inter' ? [['IGST', t.igst]] : [['CGST', t.cgst],['SGST', t.sgst]]);
   panel.innerHTML = `
     <table style="font-size:13px;">
       <tbody>
-        <tr><td>Taxable Amount</td><td class="num">${inr(t.taxable)}</td></tr>
+        <tr><td>${gstOn?'Taxable Amount':'Amount'}</td><td class="num">${inr(t.taxable)}</td></tr>
         ${gstLabel.map(([l,v])=>`<tr><td>${l}</td><td class="num">${inr(v)}</td></tr>`).join('')}
         <tr><td>Round Off</td><td class="num">${inr(t.roundOff)}</td></tr>
         <tr class="tfoot-row"><td>${totalLabel}</td><td class="num">${inr(t.grandTotal)}</td></tr>
@@ -1848,7 +1862,8 @@ function bindInvoiceFormEvents(mount, actions){
   document.getElementById('f_po_number').addEventListener('input', e=>DRAFT.po_number=e.target.value);
   document.getElementById('f_order_no').addEventListener('input', e=>DRAFT.order_no=e.target.value);
   document.getElementById('f_dispatched').addEventListener('input', e=>DRAFT.dispatched_through=e.target.value);
-  document.getElementById('f_supply_type').addEventListener('change', e=>{ DRAFT.supply_type=e.target.value; renderTotalsPanel(); });
+  const supplyTypeSel = document.getElementById('f_supply_type');
+  if(supplyTypeSel) supplyTypeSel.addEventListener('change', e=>{ DRAFT.supply_type=e.target.value; renderTotalsPanel(); renderLineItems(); });
   const propStatus = document.getElementById('f_proposal_status');
   if(propStatus) propStatus.addEventListener('change', e=>DRAFT.proposal_status=e.target.value);
   document.getElementById('f_client_id').addEventListener('change', e=>{ DRAFT.client_id=e.target.value; updateClientPreview(); });
@@ -2407,19 +2422,29 @@ function printLedger(){
   const outstanding = t.total - t.paid;
   const c = lf.clientId!=='all' ? clientById(lf.clientId) : null;
   const s = STATE.settings;
+  const theme = s.print_theme || 'classic';
  
   const html = `
-    <div class="pdoc">
-      <div class="ledger-print-head">
-        <h2 style="color:#fff;text-decoration:none;text-align:left;margin:0;">${escapeHtml(s.business_name)}</h2>
-        <div style="font-size:11px;opacity:.9;">${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')} | GSTIN: ${escapeHtml(s.gstin||'')}</div>
+    <div class="pdoc2" style="${pdfThemeVars(theme)}">
+      <table class="ph-headrow"><tr>
+        <td style="width:55%;">
+          ${s.logo_data_url ? `<img src="${s.logo_data_url}" class="ph-logo">` : `<div class="ph-bizname">${escapeHtml(s.business_name||'')}</div>`}
+          <div style="font-size:9px;margin-top:6px;">${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')} | GSTIN: <b>${escapeHtml(s.gstin||'')}</b></div>
+        </td>
+        <td style="width:45%;text-align:right;vertical-align:top;">
+          <div class="ph-doctitle">Client Ledger</div>
+        </td>
+      </tr></table>
+ 
+      <div style="margin-top:18px;">
+        <div class="ph-box-label" style="font-size:13px;">${c ? escapeHtml(c.name) : 'All Clients (Combined)'}</div>
+        <div style="font-size:9px;color:#5B6B7A;margin-top:2px;">
+          Period: ${lf.from?fmtDate(lf.from):'Beginning'} to ${lf.to?fmtDate(lf.to):'Today'}
+          ${c ? `&nbsp;|&nbsp; ${escapeHtml(c.address||'')} &nbsp;|&nbsp; GSTIN: ${escapeHtml(c.gstin||'—')} &nbsp;|&nbsp; PAN: ${escapeHtml(c.pan||'—')}` : ''}
+        </div>
       </div>
-      <h3 style="margin:0 0 4px;">SALES LEDGER ${c ? '— '+escapeHtml(c.name) : '(All Clients)'}</h3>
-      <div style="font-size:11px;color:#555;margin-bottom:14px;">
-        Period: ${lf.from?fmtDate(lf.from):'Beginning'} to ${lf.to?fmtDate(lf.to):'Today'}
-        ${c ? `<br>${escapeHtml(c.address||'')} | GSTIN: ${escapeHtml(c.gstin||'—')} | PAN: ${escapeHtml(c.pan||'—')}` : ''}
-      </div>
-      <table class="items">
+ 
+      <table class="ph-items" style="margin-top:14px;border-top:var(--ph-border-w) solid var(--ph-border);">
         <thead><tr>
           <th>S.No</th><th>Invoice No</th><th>Date</th><th>PO Number</th>${showClientCol?'<th>Client</th>':''}<th>Item</th>
           <th>Qty</th><th>Taxable</th><th>CGST</th><th>SGST</th>${t.igst?'<th>IGST</th>':''}<th>Round Off</th><th>Total</th><th>Paid</th><th>Status</th>
@@ -2438,7 +2463,7 @@ function printLedger(){
               <td>${inv._status}</td>
             </tr>`;
           }).join('')}
-          <tr style="font-weight:700;background:#eee;">
+          <tr style="font-weight:700;background:#FAFBFD;">
             <td colspan="${5+(showClientCol?1:0)}" style="text-align:right;">TOTAL</td>
             <td style="text-align:right;">${t.qty}</td>
             <td style="text-align:right;">${inr(t.taxable)}</td>
@@ -2452,7 +2477,7 @@ function printLedger(){
           </tr>
         </tbody>
       </table>
-      <p style="margin-top:14px;font-size:11.5px;">Outstanding Balance: <b>${inr(outstanding)}</b></p>
+      <p style="margin-top:14px;font-size:10.5px;">Outstanding Balance: <b class="ph-strong">${inr(outstanding)}</b></p>
     </div>
   `;
   document.getElementById('printLedgerArea').innerHTML = html;
@@ -2658,25 +2683,33 @@ function printLedgerBook(){
   const c = overall ? null : clientById(f.clientId);
   if(rows.length===0){ toast('No transactions to print','error'); return; }
   const s = STATE.settings;
+  const theme = s.print_theme || 'classic';
   const totalDebit = rows.reduce((s,r)=>s+r.debit,0);
   const totalCredit = rows.reduce((s,r)=>s+r.credit,0);
  
   const html = `
-    <div class="pdoc">
-      <div class="ledger-print-head">
-        <h2 style="color:#fff;text-decoration:none;text-align:left;margin:0;">${escapeHtml(s.business_name)}</h2>
-        <div style="font-size:11px;opacity:.9;">${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')} | GSTIN: ${escapeHtml(s.gstin||'')}</div>
+    <div class="pdoc2" style="${pdfThemeVars(theme)}">
+      <table class="ph-headrow"><tr>
+        <td style="width:55%;">
+          ${s.logo_data_url ? `<img src="${s.logo_data_url}" class="ph-logo">` : `<div class="ph-bizname">${escapeHtml(s.business_name||'')}</div>`}
+          <div style="font-size:9px;margin-top:6px;">${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')} | GSTIN: <b>${escapeHtml(s.gstin||'')}</b></div>
+        </td>
+        <td style="width:45%;text-align:right;vertical-align:top;">
+          <div class="ph-doctitle">Ledger Book</div>
+        </td>
+      </tr></table>
+ 
+      <div style="margin-top:18px;">
+        <div class="ph-box-label" style="font-size:13px;">${overall ? 'All Clients (Combined)' : escapeHtml(c?c.name:'')}</div>
+        <div style="font-size:9px;color:#5B6B7A;margin-top:2px;">Period: ${f.from?fmtDate(f.from):'Beginning'} to ${f.to?fmtDate(f.to):'Today'}</div>
       </div>
-      <h3 style="margin:0 0 4px;">LEDGER BOOK ${overall ? '(All Clients)' : '— '+escapeHtml(c?c.name:'')}</h3>
-      <div style="font-size:11px;color:#555;margin-bottom:14px;">
-        Period: ${f.from?fmtDate(f.from):'Beginning'} to ${f.to?fmtDate(f.to):'Today'}
-      </div>
-      <table class="items">
+ 
+      <table class="ph-items" style="margin-top:14px;border-top:var(--ph-border-w) solid var(--ph-border);">
         <thead><tr>
           <th>Date</th><th>Particulars</th>${overall?'<th>Client</th>':''}<th>Voucher</th><th>Debit</th><th>Credit</th><th>Balance</th>
         </tr></thead>
         <tbody>
-          <tr style="background:#eee;font-weight:700;">
+          <tr style="background:#FAFBFD;font-weight:700;">
             <td>${f.from?fmtDate(f.from):'—'}</td><td colspan="${overall?2:1}">Opening Balance</td><td></td><td></td><td></td>
             <td style="text-align:right;">${formatBalance(openingBalance)}</td>
           </tr>
@@ -2688,7 +2721,7 @@ function printLedgerBook(){
             <td style="text-align:right;">${r.credit>0.004?inr(r.credit):''}</td>
             <td style="text-align:right;">${formatBalance(r.balance)}</td>
           </tr>`).join('')}
-          <tr style="font-weight:700;background:#eee;">
+          <tr style="font-weight:700;background:#FAFBFD;">
             <td colspan="${overall?3:2}">TOTAL</td><td></td>
             <td style="text-align:right;">${inr(totalDebit)}</td>
             <td style="text-align:right;">${inr(totalCredit)}</td>
@@ -2696,7 +2729,7 @@ function printLedgerBook(){
           </tr>
         </tbody>
       </table>
-      <p style="margin-top:14px;font-size:11.5px;">Closing Balance: <b>${formatBalance(closingBalance)}</b></p>
+      <p style="margin-top:14px;font-size:10.5px;">Closing Balance: <b class="ph-strong">${formatBalance(closingBalance)}</b></p>
     </div>
   `;
   document.getElementById('printLedgerArea').innerHTML = html;
@@ -2731,10 +2764,13 @@ function printInvoiceById(id, includeSignature, themeKey){
   const lis = inv.line_items||[];
   const showIgst = inv.supply_type==='inter';
   const type = docType(inv);
-  const meta = DOC_TYPES[type];
+  const gstOn = s.gst_registered!==false;
+  const isBillOfSupply = type==='invoice' && !gstOn;
+  const metaBase = DOC_TYPES[type];
+  const meta = isBillOfSupply ? {...metaBase, label:'Bill of Supply', short:'Bill of Supply'} : metaBase;
   const isProposal = type==='proposal';
   const showSig = includeSignature===undefined ? !!s.show_signature_default : !!includeSignature;
-  const theme = themeKey || s.print_theme || 'classic';
+  const theme = themeKey || (isBillOfSupply ? 'billofsupply' : (s.print_theme || 'classic'));
   const themeConf = PDF_THEMES[theme] || PDF_THEMES.classic;
   const isLetterhead = themeConf.layout==='letterhead';
   const hsnGroups = groupLineItemsByHsn(lis, showIgst);
@@ -2758,8 +2794,8 @@ function printInvoiceById(id, includeSignature, themeKey){
     ${escapeHtml(c.address||'')}<br>
     ${escapeHtml([c.city, c.state, c.pincode].filter(Boolean).join(', '))}<br>
     ${c.contact_person?`Cont. ${escapeHtml(c.contact_person)}<br>`:''}
-    GSTIN: <b>${escapeHtml(c.gstin||'—')}</b><br>
-    PAN: <b>${escapeHtml(c.pan||'—')}</b>` : '—';
+    ${c.gstin?`GSTIN: <b>${escapeHtml(c.gstin)}</b><br>`:''}
+    ${c.pan?`PAN: <b>${escapeHtml(c.pan)}</b>`:''}` : '—';
  
   const shipToHtml = inv.ship_same_as_bill
     ? (c ? `<b class="ph-strong">${escapeHtml(c.name)}</b><br>
@@ -2768,6 +2804,32 @@ function printInvoiceById(id, includeSignature, themeKey){
     : `${inv.ship_to?.address?`<b class="ph-strong">${escapeHtml(inv.ship_to.address)}</b><br>`:'—'}
       ${escapeHtml([inv.ship_to?.city, inv.ship_to?.state, inv.ship_to?.pincode].filter(Boolean).join(', '))}`;
  
+  function buildItemsTableHtml(){
+    return `
+      <table class="ph-items">
+        <thead><tr>
+          <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th>${gstOn?'<th>GST Rate</th>':''}<th>Qty</th><th>Rate</th><th>Amount</th>
+          ${gstOn?`<th>CGST</th><th>SGST</th>${showIgst?'<th>IGST</th>':''}`:''}<th>Total</th>
+        </tr></thead>
+        <tbody>
+          ${lis.map((li,idx)=>{
+            const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
+            const gstAmt = gstOn ? taxable*(Number(li.gstPercent)||0)/100 : 0;
+            const cgst = showIgst?0:gstAmt/2, sgst = showIgst?0:gstAmt/2, igst = showIgst?gstAmt:0;
+            const total = taxable+cgst+sgst+igst;
+            return `<tr>
+              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td><td>${escapeHtml(li.hsn||'')}</td>
+              ${gstOn?`<td style="text-align:right;">${li.gstPercent}%</td>`:''}
+              <td style="text-align:right;">${li.qty}</td><td style="text-align:right;">${inr(li.rate)}</td>
+              <td style="text-align:right;">${inr(taxable)}</td>
+              ${gstOn?`<td style="text-align:right;">${inr(cgst)}</td><td style="text-align:right;">${inr(sgst)}</td>${showIgst?`<td style="text-align:right;">${inr(igst)}</td>`:''}`:''}
+              <td style="text-align:right;">${inr(total)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+  }
+ 
   const headerBillingHtml = isLetterhead ? `
       <table class="ph-letterhead-row"><tr>
         <td style="width:58%;vertical-align:top;">
@@ -2775,7 +2837,7 @@ function printInvoiceById(id, includeSignature, themeKey){
           <div class="ph-letterhead-info">
             <b class="ph-strong">${escapeHtml(s.business_name||'')}</b><br>
             ${escapeHtml(s.address_line1||'')}, ${escapeHtml(s.address_line2||'')}<br>
-            GSTIN: <b>${escapeHtml(s.gstin||'')}</b> &nbsp; PAN: <b>${escapeHtml(s.pan||'')}</b><br>
+            ${gstOn?`GSTIN: <b>${escapeHtml(s.gstin||'')}</b> &nbsp; `:''}PAN: <b>${escapeHtml(s.pan||'')}</b><br>
             ${s.email?`${escapeHtml(s.email)} `:''}${s.phone?`&nbsp; ${escapeHtml(s.phone)}`:''}
           </div>
         </td>
@@ -2801,28 +2863,7 @@ function printInvoiceById(id, includeSignature, themeKey){
  
       <table class="ph-spacer-row"><tr><td>&nbsp;</td></tr></table>
  
-      <table class="ph-items">
-        <thead><tr>
-          <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th><th>GST Rate</th><th>Qty</th><th>Rate</th><th>Amount</th>
-          <th>CGST</th><th>SGST</th>${showIgst?'<th>IGST</th>':''}<th>Total</th>
-        </tr></thead>
-        <tbody>
-          ${lis.map((li,idx)=>{
-            const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
-            const gstAmt = taxable*(Number(li.gstPercent)||0)/100;
-            const cgst = showIgst?0:gstAmt/2, sgst = showIgst?0:gstAmt/2, igst = showIgst?gstAmt:0;
-            const total = taxable+cgst+sgst+igst;
-            return `<tr>
-              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td><td>${escapeHtml(li.hsn||'')}</td>
-              <td style="text-align:right;">${li.gstPercent}%</td>
-              <td style="text-align:right;">${li.qty}</td><td style="text-align:right;">${inr(li.rate)}</td>
-              <td style="text-align:right;">${inr(taxable)}</td><td style="text-align:right;">${inr(cgst)}</td>
-              <td style="text-align:right;">${inr(sgst)}</td>${showIgst?`<td style="text-align:right;">${inr(igst)}</td>`:''}
-              <td style="text-align:right;">${inr(total)}</td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
+      ${buildItemsTableHtml()}
       </div>
   ` : `
       <table class="ph-headrow"><tr>
@@ -2846,7 +2887,7 @@ function printInvoiceById(id, includeSignature, themeKey){
             <b class="ph-strong">${escapeHtml(s.business_name||'')}</b><br>
             ${escapeHtml(s.address_line1||'')}<br>
             ${escapeHtml(s.address_line2||'')}<br>
-            GSTIN: <b>${escapeHtml(s.gstin||'')}</b><br>
+            ${gstOn?`GSTIN: <b>${escapeHtml(s.gstin||'')}</b><br>`:''}
             PAN: <b>${escapeHtml(s.pan||'')}</b><br>
             ${s.email?`Email: <b>${escapeHtml(s.email)}</b><br>`:''}
             ${s.phone?`Phone: <b>${escapeHtml(s.phone)}</b>`:''}
@@ -2860,40 +2901,19 @@ function printInvoiceById(id, includeSignature, themeKey){
  
       <table class="ph-spacer-row"><tr><td>&nbsp;</td></tr></table>
  
-      <table class="ph-items">
-        <thead><tr>
-          <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th><th>GST Rate</th><th>Qty</th><th>Rate</th><th>Amount</th>
-          <th>CGST</th><th>SGST</th>${showIgst?'<th>IGST</th>':''}<th>Total</th>
-        </tr></thead>
-        <tbody>
-          ${lis.map((li,idx)=>{
-            const taxable = (Number(li.qty)||0)*(Number(li.rate)||0);
-            const gstAmt = taxable*(Number(li.gstPercent)||0)/100;
-            const cgst = showIgst?0:gstAmt/2, sgst = showIgst?0:gstAmt/2, igst = showIgst?gstAmt:0;
-            const total = taxable+cgst+sgst+igst;
-            return `<tr>
-              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td><td>${escapeHtml(li.hsn||'')}</td>
-              <td style="text-align:right;">${li.gstPercent}%</td>
-              <td style="text-align:right;">${li.qty}</td><td style="text-align:right;">${inr(li.rate)}</td>
-              <td style="text-align:right;">${inr(taxable)}</td><td style="text-align:right;">${inr(cgst)}</td>
-              <td style="text-align:right;">${inr(sgst)}</td>${showIgst?`<td style="text-align:right;">${inr(igst)}</td>`:''}
-              <td style="text-align:right;">${inr(total)}</td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
+      ${buildItemsTableHtml()}
       </div>
   `;
  
   const html = `
-    <div class="pdoc2" style="${pdfThemeVars(theme)}">
+    <div class="pdoc2" style="${pdfThemeVars(theme, isBillOfSupply ? BILL_OF_SUPPLY_ACCENT : null)}">
       ${headerBillingHtml}
  
       <table class="ph-stack-totals">
-        <tr><td>Amount</td><td>${inr(inv.taxable_total)}</td></tr>
-        <tr><td>CGST</td><td>${inr(inv.cgst_total)}</td></tr>
+        <tr><td>${gstOn?'Amount':'Amount'}</td><td>${inr(inv.taxable_total)}</td></tr>
+        ${gstOn?`<tr><td>CGST</td><td>${inr(inv.cgst_total)}</td></tr>
         <tr><td>SGST</td><td>${inr(inv.sgst_total)}</td></tr>
-        ${showIgst?`<tr><td>IGST</td><td>${inr(inv.igst_total)}</td></tr>`:''}
+        ${showIgst?`<tr><td>IGST</td><td>${inr(inv.igst_total)}</td></tr>`:''}`:''}
         ${Number(inv.round_off)!==0?`<tr><td>Round Off</td><td>${inr(inv.round_off)}</td></tr>`:''}
         <tr class="strong"><td>${isProposal?'Estimated Total':'Total (INR)'}</td><td>${inr(inv.grand_total)}</td></tr>
         ${!isProposal ? `<tr class="strong"><td>Amount Paid</td><td>(${inr(inv.amount_paid)})</td></tr>` : ''}
@@ -2915,7 +2935,7 @@ function printInvoiceById(id, includeSignature, themeKey){
         </td>
       </tr></table>
  
-      ${hsnGroups.length ? `
+      ${(gstOn && hsnGroups.length) ? `
       <table class="ph-hsn">
         <thead><tr>
           <th>HSN</th><th>Taxable Value</th>
@@ -2938,7 +2958,7 @@ function printInvoiceById(id, includeSignature, themeKey){
         </tbody>
       </table>
       <div class="ph-tax-words">Total Tax In Words: ${numberToWordsINR(totalTax).toUpperCase()} RUPEES ${(totalTax%1===0)?'':'AND '+Math.round((totalTax%1)*100)+' PAISE '}ONLY</div>
-      ` : ''}
+      ` : !gstOn ? `<div class="ph-tax-words">Amount In Words: ${numberToWordsINR(inv.grand_total).toUpperCase()} RUPEES ONLY</div>` : ''}
  
       <div class="ph-footer">
         ${showSig ? `
@@ -3140,6 +3160,27 @@ function renderSettings(mount, actions){
   actions.innerHTML = '';
   const s = STATE.settings;
   mount.innerHTML = `
+    <div class="card card-pad" style="margin-bottom:16px;">
+      <div class="toolbar" style="margin-bottom:14px;">
+        <div class="section-title" style="margin:0;">Companies</div>
+        <button class="btn btn-primary" data-action="settings-add-company">＋ Add Company</button>
+      </div>
+      <div class="theme-picker-grid">
+        ${STATE.companies.map(c=>`
+          <div class="theme-swatch ${c.id===STATE.currentCompanyId?'active':''}" style="cursor:default;">
+            <div class="theme-swatch-preview" style="display:flex;align-items:center;gap:10px;padding:14px;">
+              ${c.logo_data_url ? `<img src="${c.logo_data_url}" style="width:36px;height:36px;object-fit:contain;border-radius:8px;">` : `<div class="company-list-badge">${escapeHtml((c.business_name||'B').trim().slice(0,1).toUpperCase())}</div>`}
+              <div style="flex:1;min-width:0;">
+                <div class="theme-swatch-name" style="padding:0;font-size:13px;">${escapeHtml(c.business_name||'Untitled Company')}</div>
+                ${c.id===STATE.currentCompanyId ? `<div style="font-size:10.5px;color:var(--blue);font-weight:700;margin-top:2px;">● Currently Editing</div>` : ''}
+              </div>
+            </div>
+            ${c.id!==STATE.currentCompanyId ? `<button class="btn btn-sm" style="margin:0 10px 10px;width:calc(100% - 20px);" data-switch-company="${c.id}">Switch to this company</button>` : ''}
+          </div>`).join('')}
+      </div>
+      <div class="hint" style="margin-top:12px;">Each company keeps its own clients, items, invoices, numbering, logo, and bank details — completely separate. The PIN protects all of them together.</div>
+    </div>
+ 
     <div class="grid grid-2" style="align-items:start;">
       <div class="card card-pad">
         <div class="section-title">Business Profile</div>
@@ -3159,8 +3200,13 @@ function renderSettings(mount, actions){
         <div class="field"><label>Business Name</label><input id="s_business_name" type="text" value="${escapeHtml(s.business_name||'')}"></div>
         <div class="field"><label>Address Line 1</label><input id="s_addr1" type="text" value="${escapeHtml(s.address_line1||'')}"></div>
         <div class="field"><label>Address Line 2</label><input id="s_addr2" type="text" value="${escapeHtml(s.address_line2||'')}"></div>
+        <div class="checkbox-row" style="margin-bottom:14px;">
+          <input type="checkbox" id="s_gst_registered" ${s.gst_registered!==false?'checked':''}>
+          <label style="margin:0;" for="s_gst_registered">This business is GST registered</label>
+        </div>
+        <div class="hint" style="margin-top:-8px;margin-bottom:14px;">${s.gst_registered!==false ? 'Invoices show CGST/SGST/IGST and print as "Tax Invoice".' : 'GST fields are hidden and invoices print as "Bill of Supply" — no tax is calculated or charged.'}</div>
         <div class="field-row">
-          <div class="field"><label>GSTIN</label><input id="s_gstin" type="text" value="${escapeHtml(s.gstin||'')}"></div>
+          <div class="field"><label>GSTIN</label><input id="s_gstin" type="text" value="${escapeHtml(s.gstin||'')}" ${s.gst_registered===false?'placeholder="Not applicable"':''}></div>
           <div class="field"><label>PAN</label><input id="s_pan" type="text" value="${escapeHtml(s.pan||'')}"></div>
         </div>
         <div class="field-row">
@@ -3275,8 +3321,10 @@ function renderSettings(mount, actions){
       signatory_name: document.getElementById('s_sig_name').value.trim(),
       signatory_title: document.getElementById('s_sig_title').value.trim(),
       show_signature_default: document.getElementById('s_sig_default').checked,
+      gst_registered: document.getElementById('s_gst_registered').checked,
     };
     await saveSettingsPatch(payload, 'Profile saved');
+    renderView();
   });
  
   const logoFile = document.getElementById('logoFile');
@@ -3361,6 +3409,9 @@ function renderSettings(mount, actions){
  
   document.querySelector('[data-action="export-backup"]').addEventListener('click', exportFullBackup);
   document.getElementById('importFile').addEventListener('change', importFullBackup);
+ 
+  document.querySelector('[data-action="settings-add-company"]').addEventListener('click', openAddCompanyModal);
+  mount.querySelectorAll('[data-switch-company]').forEach(b=>b.addEventListener('click', ()=>switchCompany(b.dataset.switchCompany)));
  
   renderThemePicker();
 }
@@ -3511,4 +3562,6 @@ document.addEventListener('DOMContentLoaded', boot);
 </body>
 </html>
  
+
+
 
