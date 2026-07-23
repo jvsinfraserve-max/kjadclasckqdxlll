@@ -1650,7 +1650,7 @@ async function renderInvoiceForm(mount, actions){
           <table class="line-items-table">
             <thead><tr>
               <th style="min-width:180px;">Item / Description</th>
-              <th style="width:90px;">HSN/SAC</th>
+              ${STATE.settings.gst_registered!==false ? '<th style="width:90px;">HSN/SAC</th>' : ''}
               <th style="width:70px;">Qty</th>
               <th style="width:100px;">Rate (₹)</th>
               ${STATE.settings.gst_registered!==false ? '<th style="width:75px;">GST %</th>' : ''}
@@ -1756,7 +1756,7 @@ function renderLineItems(){
         <select data-li="itemPick" data-idx="${idx}" style="margin-bottom:4px;">${itemOptions}</select>
         <input type="text" data-li="description" data-idx="${idx}" value="${escapeHtml(li.description)}" placeholder="Description">
       </td>
-      <td data-label="HSN/SAC"><input type="text" data-li="hsn" data-idx="${idx}" value="${escapeHtml(li.hsn)}"></td>
+      ${gstOn ? `<td data-label="HSN/SAC"><input type="text" data-li="hsn" data-idx="${idx}" value="${escapeHtml(li.hsn)}"></td>` : ''}
       <td data-label="Qty"><input type="number" data-li="qty" data-idx="${idx}" value="${li.qty}" step="0.01" min="0"></td>
       <td data-label="Rate (₹)"><input type="number" data-li="rate" data-idx="${idx}" value="${li.rate}" step="0.01" min="0"></td>
       ${gstOn ? `<td data-label="GST %">
@@ -2808,7 +2808,7 @@ function printInvoiceById(id, includeSignature, themeKey){
     return `
       <table class="ph-items">
         <thead><tr>
-          <th style="width:22px;"></th><th>Item</th><th>HSN/SAC</th>${gstOn?'<th>GST Rate</th>':''}<th>Qty</th><th>Rate</th><th>Amount</th>
+          <th style="width:22px;"></th><th>Item</th>${gstOn?'<th>HSN/SAC</th><th>GST Rate</th>':''}<th>Qty</th><th>Rate</th><th>Amount</th>
           ${gstOn?`<th>CGST</th><th>SGST</th>${showIgst?'<th>IGST</th>':''}`:''}<th>Total</th>
         </tr></thead>
         <tbody>
@@ -2818,8 +2818,8 @@ function printInvoiceById(id, includeSignature, themeKey){
             const cgst = showIgst?0:gstAmt/2, sgst = showIgst?0:gstAmt/2, igst = showIgst?gstAmt:0;
             const total = taxable+cgst+sgst+igst;
             return `<tr>
-              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td><td>${escapeHtml(li.hsn||'')}</td>
-              ${gstOn?`<td style="text-align:right;">${li.gstPercent}%</td>`:''}
+              <td>${idx+1}</td><td>${escapeHtml(li.description)}</td>
+              ${gstOn?`<td>${escapeHtml(li.hsn||'')}</td><td style="text-align:right;">${li.gstPercent}%</td>`:''}
               <td style="text-align:right;">${li.qty}</td><td style="text-align:right;">${inr(li.rate)}</td>
               <td style="text-align:right;">${inr(taxable)}</td>
               ${gstOn?`<td style="text-align:right;">${inr(cgst)}</td><td style="text-align:right;">${inr(sgst)}</td>${showIgst?`<td style="text-align:right;">${inr(igst)}</td>`:''}`:''}
@@ -3562,6 +3562,5 @@ document.addEventListener('DOMContentLoaded', boot);
 </body>
 </html>
  
-
 
 
