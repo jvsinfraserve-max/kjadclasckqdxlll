@@ -2198,26 +2198,45 @@ function duplicateInvoice(id){
 function exportInvoicesExcel(){
   const list = getFilteredInvoicesForList();
   if(list.length===0){ toast('No documents to export','error'); return; }
-  const rows = list.map(inv=>{
+  const rows = [];
+  const merges = [];
+  const mergeCols = [0,1,2]; // only Type, Number, Date — everything else (Client onward) stays per-row
+  list.forEach(inv=>{
     const c = clientById(inv.client_id);
-    return {
-      'Type': DOC_TYPES[docType(inv)].label,
-      'Number': inv.invoice_no,
-      'Date': inv.invoice_date,
-      'Client': c?c.name:'',
-      'PO Number': inv.po_number||'',
-      'Taxable': Number(inv.taxable_total)||0,
-      'CGST': Number(inv.cgst_total)||0,
-      'SGST': Number(inv.sgst_total)||0,
-      'IGST': Number(inv.igst_total)||0,
-      'Round Off': Number(inv.round_off)||0,
-      'Total': Number(inv.grand_total)||0,
-      'Paid': Number(inv.amount_paid)||0,
-      'Due': Number(inv.due_amount)||0,
-      'Status': inv._status,
-    };
+    const lis = (inv.line_items||[]).length ? inv.line_items : [{description:'',hsn:'',qty:'',rate:''}];
+    const startRow = rows.length;
+    lis.forEach(li=>{
+      rows.push({
+        'Type': DOC_TYPES[docType(inv)].label,
+        'Number': inv.invoice_no,
+        'Date': inv.invoice_date,
+        'Client': c?c.name:'',
+        'Item': li.description||'',
+        'HSN/SAC': li.hsn||'',
+        'Qty': li.qty===''?'':Number(li.qty)||0,
+        'Rate': li.rate===''?'':Number(li.rate)||0,
+        'Item Amount': (li.qty===''||li.rate==='')?'':Number(li.qty)*Number(li.rate),
+        'PO Number': inv.po_number||'',
+        'Invoice Taxable': Number(inv.taxable_total)||0,
+        'CGST': Number(inv.cgst_total)||0,
+        'SGST': Number(inv.sgst_total)||0,
+        'IGST': Number(inv.igst_total)||0,
+        'Round Off': Number(inv.round_off)||0,
+        'Invoice Total': Number(inv.grand_total)||0,
+        'Paid': Number(inv.amount_paid)||0,
+        'Due': Number(inv.due_amount)||0,
+        'Status': inv._status,
+      });
+    });
+    if(lis.length > 1){
+      const endRow = rows.length - 1;
+      mergeCols.forEach(col=>{
+        merges.push({s:{r:startRow+1, c:col}, e:{r:endRow+1, c:col}});
+      });
+    }
   });
   const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!merges'] = merges;
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Documents');
   XLSX.writeFile(wb, `Documents_${todayISO()}.xlsx`);
@@ -3562,5 +3581,3 @@ document.addEventListener('DOMContentLoaded', boot);
 </body>
 </html>
  
-
-
